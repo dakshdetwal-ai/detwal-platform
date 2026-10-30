@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!client){setStatus('Authentication failed to load. Refresh and try again.','error');return;}
     button.disabled=true;button.querySelector('.btn-text').textContent='Sending…';
     try{
-      const {error}=await client.auth.resetPasswordForEmail(value,{redirectTo:'https://detwal.in/reset-password.html'});
+      const {error}=await client.auth.resetPasswordForEmail(value,{redirectTo:'https://detwal.in/detwal/reset-password.html'});
       if(error) throw error;
       setStatus('If an account exists for this email, a password reset link has been sent. Check your inbox and spam folder.','success');
     }catch(error){setStatus(error.message||'Could not send the reset email. Please try again.','error');}
