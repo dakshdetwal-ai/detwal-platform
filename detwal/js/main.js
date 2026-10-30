@@ -1,7 +1,7 @@
 /* ==========================================================================
-   DETwal — Main JS
-   Modular, dependency-free. Safe to extend with Cloudflare Workers /
-   Supabase integrations later (see TODO markers).
+   DETwal · TopG Algo — Main JS
+   Modular, dependency-free. Structured for future integration with
+   Cloudflare Workers, Cloudflare D1 and Supabase Auth.
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
   initRevealAnimations();
   setCurrentYear();
+  initAccessButton();
 });
 
 /* --------------------------------------------------------------------------
@@ -34,17 +35,14 @@ function initMobileNav() {
 
   navToggle.addEventListener('click', toggleNav);
 
-  // Close menu after clicking a nav link (mobile UX)
   mainNav.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', closeNav);
   });
 
-  // Close menu if viewport is resized back to desktop
   window.addEventListener('resize', () => {
     if (window.innerWidth > 768) closeNav();
   });
 
-  // Close menu when clicking outside of it
   document.addEventListener('click', (e) => {
     const isClickInside = mainNav.contains(e.target) || navToggle.contains(e.target);
     if (!isClickInside && mainNav.classList.contains('open')) closeNav();
@@ -66,7 +64,7 @@ function initFaqAccordion() {
     question.addEventListener('click', () => {
       const isExpanded = question.getAttribute('aria-expanded') === 'true';
 
-      // Close all other open items (single-open accordion behavior)
+      // Single-open accordion behavior
       faqItems.forEach((otherItem) => {
         if (otherItem === item) return;
         const otherQuestion = otherItem.querySelector('.faq-question');
@@ -77,7 +75,6 @@ function initFaqAccordion() {
         }
       });
 
-      // Toggle the clicked item
       question.setAttribute('aria-expanded', String(!isExpanded));
       answer.style.maxHeight = isExpanded ? null : `${answer.scrollHeight}px`;
     });
@@ -119,9 +116,25 @@ function setCurrentYear() {
 }
 
 /* --------------------------------------------------------------------------
-   TODO (future integration points):
-   - Hook "Sign Up" / "Login" buttons to Supabase Auth.
-   - Hook "Join Community" buttons to community onboarding flow.
-   - Replace static Product "Explore" buttons with routing to product pages
-     once those pages/APIs (Cloudflare Workers) are available.
+   Access Button Placeholder
+   This button is intentionally not wired to any purchase/auth flow yet.
+   It is isolated here so the future purchase-page redirect or Supabase/
+   Cloudflare Workers integration can be dropped in with a single change.
+   -------------------------------------------------------------------------- */
+function initAccessButton() {
+  const accessBtn = document.getElementById('getAccessBtn');
+  if (!accessBtn) return;
+
+  accessBtn.addEventListener('click', () => {
+    // TODO: Connect to the DETwal purchase/access page once available.
+    // Example (future): window.location.href = 'https://access.detwal.com';
+    console.info('TopG Algo access flow not yet connected.');
+  });
+}
+
+/* --------------------------------------------------------------------------
+   Future integration points:
+   - Login / Sign Up → Supabase Auth.
+   - Get Access / Get TopG Algo Access → Payment/purchase system.
+   - Dashboard data (trade monitoring, preferences) → Cloudflare Workers + D1.
    -------------------------------------------------------------------------- */
