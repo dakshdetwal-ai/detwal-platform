@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DETwal — Everything You Need to Trade Better</title>
-<meta name="description" content="DETwal is a trading ecosystem for journaling trades, analyzing market-moving news, discovering strategies and connecting with traders.">
+<title>TopG Algo by DETwal — Automated Gold Trading Technology</title>
+<meta name="description" content="TopG Algo by DETwal is an automated gold (XAUUSD) trading solution built on systematic execution and disciplined risk management.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -26,9 +26,10 @@
 
     <nav class="main-nav" id="mainNav" aria-label="Primary navigation">
       <ul class="nav-links">
-        <li><a href="#products">Products</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#community">Community</a></li>
+        <li><a href="#top">Home</a></li>
+        <li><a href="#topg-algo">TopG Algo</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#faq">FAQ</a></li>
       </ul>
       <div class="nav-actions">
         <button type="button" class="btn btn-ghost">Login</button>
@@ -51,123 +52,165 @@
       <div class="orb orb-1"></div>
       <div class="orb orb-2"></div>
       <div class="grid-overlay"></div>
+
+      <div class="chart-visual">
+        <svg class="trend-line" viewBox="0 0 600 200" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="trendGradient" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#9257F5" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#AD8AFF" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#9257F5" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path class="trend-path" d="M0,140 C60,120 90,160 150,110 C210,60 240,130 300,90 C360,50 390,100 450,70 C510,40 540,90 600,60" />
+        </svg>
+
+        <div class="candles" aria-hidden="true">
+          <span class="candle up"></span>
+          <span class="candle down"></span>
+          <span class="candle up"></span>
+          <span class="candle up"></span>
+          <span class="candle down"></span>
+          <span class="candle up"></span>
+          <span class="candle down"></span>
+          <span class="candle up"></span>
+          <span class="candle up"></span>
+          <span class="candle down"></span>
+          <span class="candle up"></span>
+          <span class="candle up"></span>
+        </div>
+      </div>
     </div>
 
     <div class="container hero-content reveal">
-      <span class="hero-badge">The DETwal Ecosystem</span>
-      <h1 class="hero-title">Everything you need to trade better.</h1>
+      <span class="hero-badge">Built for Gold Traders</span>
+      <h1 class="hero-title">
+        While the world watches the charts,
+        <span class="gradient-text">our algorithm captures the gold.</span>
+      </h1>
       <p class="hero-desc">
-        Journal your trades, analyze market-moving news, discover strategies
-        and connect with traders — all in one ecosystem.
+        Meet TopG Algo by DETwal — automated gold trading powered by systematic
+        execution, intelligent technology and disciplined risk management.
       </p>
       <div class="hero-buttons">
-        <a href="#products" class="btn btn-primary btn-lg">Explore DETwal</a>
-        <a href="#community" class="btn btn-ghost btn-lg">Join Community</a>
+        <a href="#topg-algo" class="btn btn-primary btn-lg">Explore TopG Algo</a>
+        <a href="#access" class="btn btn-ghost btn-lg">Get Access</a>
       </div>
     </div>
   </section>
 
-  <!-- ============ PRODUCTS ============ -->
-  <section class="section" id="products">
+  <!-- ============ INTRODUCING TOPG ALGO ============ -->
+  <section class="section" id="topg-algo">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-badge">Products</span>
-        <h2 class="section-title">Built for every part of your trading journey</h2>
-        <p class="section-desc">A suite of focused tools designed to work seamlessly together.</p>
+        <span class="section-badge">Introducing TopG Algo</span>
+        <h2 class="section-title">Meet the technology behind your execution.</h2>
+        <p class="section-desc">
+          TopG Algo is an automated trading solution designed to execute a systematic
+          trading approach while applying predefined risk-management rules.
+        </p>
       </div>
 
-      <div class="products-grid">
-
-        <article class="product-card reveal">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+      <div class="intro-grid">
+        <div class="intro-card reveal">
+          <div class="intro-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
-          <h3 class="card-title">DETwal Algo</h3>
-          <p class="card-desc">Automated strategy execution engineered for precision, speed and consistency.</p>
-          <button type="button" class="card-link">Explore <span aria-hidden="true">→</span></button>
-        </article>
+          <h3>Automated Gold Trading</h3>
+          <p>Systematic execution engineered specifically around XAUUSD market behavior.</p>
+        </div>
 
-        <article class="product-card reveal">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <path d="M4 20V10M12 20V4M20 20v-7" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+        <div class="intro-card reveal">
+          <div class="intro-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v16H4z M4 10h16 M10 4v16" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
-          <h3 class="card-title">Trade Analytics</h3>
-          <p class="card-desc">Deep performance insights that help you understand and refine your edge.</p>
-          <button type="button" class="card-link">Explore <span aria-hidden="true">→</span></button>
-        </article>
+          <h3>Systematic Execution</h3>
+          <p>Trades are executed according to predefined, rules-based logic — not emotion.</p>
+        </div>
 
-        <article class="product-card reveal">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <circle cx="12" cy="12" r="9"/>
-              <path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18" stroke-linecap="round"/>
-            </svg>
+        <div class="intro-card reveal">
+          <div class="intro-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21v-7M4 10V3M12 21v-11M12 6V3M20 21v-5M20 12V3" stroke-linecap="round"/></svg>
           </div>
-          <h3 class="card-title">Market Intelligence</h3>
-          <p class="card-desc">Real-time, market-moving news and analysis — organized in one place.</p>
-          <button type="button" class="card-link">Explore <span aria-hidden="true">→</span></button>
-        </article>
+          <h3>Configurable Preferences</h3>
+          <p>Adjust supported trading parameters to align with your own approach.</p>
+        </div>
 
+        <div class="intro-card reveal">
+          <div class="intro-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Individual Settings</h3>
+          <p>Each trader configures their own account preferences and risk limits.</p>
+        </div>
+
+        <div class="intro-card reveal">
+          <div class="intro-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12l4-4 4 4 4-7 4 10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Trade Monitoring</h3>
+          <p>Review execution activity and account information from your dashboard.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ FEATURES ============ -->
+  <!-- ============ KEY FEATURES ============ -->
   <section class="section section-alt" id="features">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-badge">Features</span>
-        <h2 class="section-title">Everything works together, by design</h2>
-        <p class="section-desc">A connected environment built around how traders actually think and operate.</p>
+        <span class="section-badge">Key Features</span>
+        <h2 class="section-title">Everything built around disciplined execution</h2>
       </div>
 
       <div class="features-grid">
 
         <div class="feature-card reveal">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke-linecap="round"/>
-              <circle cx="12" cy="12" r="4"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
-          <h3>Smart Automation</h3>
-          <p>Let intelligent systems handle repetitive work while you focus on strategy.</p>
+          <h3>Automated Execution</h3>
+          <p>Execute eligible trading setups according to predefined strategy rules.</p>
         </div>
 
         <div class="feature-card reveal">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <path d="M3 17l5-5 4 4 8-9" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6l-9-4z" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
-          <h3>Performance Tracking</h3>
-          <p>Visualize your trading performance with clarity and precision over time.</p>
+          <h3>Disciplined Risk Management</h3>
+          <p>Configure risk preferences and trading limits to match your tolerance.</p>
         </div>
 
         <div class="feature-card reveal">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3 11.2c.4.3.6.7.6 1.3v.5h4.8v-.5c0-.6.2-1 .6-1.3A6 6 0 0 0 12 3z" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round"/></svg>
           </div>
-          <h3>Market Insights</h3>
-          <p>Stay ahead with curated, structured market intelligence and analysis.</p>
+          <h3>Intelligent Strategy</h3>
+          <p>Systematic trading logic designed for structured, repeatable execution.</p>
         </div>
 
         <div class="feature-card reveal">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <circle cx="8" cy="8" r="3"/>
-              <circle cx="17" cy="9" r="2.5"/>
-              <path d="M2.5 20c0-3 2.5-5.3 5.5-5.3s5.5 2.3 5.5 5.3M14.5 20c0-2.2 1.8-4.2 4-4.2s4 2 4 4.2" stroke-linecap="round"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18" stroke-linecap="round"/></svg>
           </div>
-          <h3>Trader Community</h3>
-          <p>Connect, share and grow with traders who think the way you do.</p>
+          <h3>Account Flexibility</h3>
+          <p>Individual trader configurations and personalized account preferences.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 17l5-5 4 4 8-9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Trade Monitoring</h3>
+          <p>Review trading activity and execution information at any time.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.35a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.65 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.65 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.65a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15 4.65a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.35 9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15z" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Centralized Control</h3>
+          <p>Manage your TopG Algo preferences through a single dashboard.</p>
         </div>
 
       </div>
@@ -179,35 +222,95 @@
     <div class="container">
       <div class="section-header reveal">
         <span class="section-badge">How It Works</span>
-        <h2 class="section-title">Get started in three simple steps</h2>
+        <h2 class="section-title">From setup to execution in four steps</h2>
       </div>
 
-      <div class="steps">
-        <div class="step reveal">
-          <div class="step-number">01</div>
-          <h3>Create an account</h3>
-          <p>Set up your DETwal profile in just a few minutes.</p>
+      <div class="timeline">
+
+        <div class="timeline-step reveal">
+          <div class="timeline-marker">01</div>
+          <h3>Create Your Account</h3>
+          <p>Register for your personal DETwal account.</p>
         </div>
-        <div class="step reveal">
-          <div class="step-number">02</div>
-          <h3>Explore products</h3>
-          <p>Discover the tools built to sharpen your trading edge.</p>
+
+        <div class="timeline-step reveal">
+          <div class="timeline-marker">02</div>
+          <h3>Get TopG Algo Access</h3>
+          <p>Choose an available access plan or obtain authorized access.</p>
         </div>
-        <div class="step reveal">
-          <div class="step-number">03</div>
-          <h3>Get started</h3>
-          <p>Put your strategy to work within the DETwal ecosystem.</p>
+
+        <div class="timeline-step reveal">
+          <div class="timeline-marker">03</div>
+          <h3>Configure Your Preferences</h3>
+          <p>Set your supported trading preferences and risk limits.</p>
         </div>
+
+        <div class="timeline-step reveal">
+          <div class="timeline-marker">04</div>
+          <h3>Monitor Your Activity</h3>
+          <p>Review execution activity and account information through your dashboard.</p>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- ============ COMMUNITY CTA ============ -->
-  <section class="cta-section" id="community">
+  <!-- ============ PERFORMANCE & METHODOLOGY ============ -->
+  <section class="section section-alt" id="methodology">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-badge">Performance &amp; Methodology</span>
+        <h2 class="section-title">Built on a strategy. Driven by discipline.</h2>
+        <p class="section-desc">
+          TopG Algo is developed around a structured, rules-based approach to the
+          gold market. The information below outlines our methodology framework.
+        </p>
+      </div>
+
+      <div class="methodology-grid">
+
+        <div class="method-card reveal">
+          <h3>Strategy Logic Overview</h3>
+          <p class="placeholder-text">Strategy logic documentation will be published here as it becomes available for public disclosure.</p>
+        </div>
+
+        <div class="method-card reveal">
+          <h3>Backtesting Methodology</h3>
+          <p class="placeholder-text">Details on our backtesting process, data sources and testing periods will be provided here.</p>
+        </div>
+
+        <div class="method-card reveal">
+          <h3>Historical Testing Results</h3>
+          <p class="placeholder-text">Verified historical results will be added once finalized and independently reviewable.</p>
+        </div>
+
+        <div class="method-card reveal">
+          <h3>Risk &amp; Drawdown Information</h3>
+          <p class="placeholder-text">Risk parameters and drawdown characteristics will be documented here for transparency.</p>
+        </div>
+
+      </div>
+
+      <div class="disclaimer-box reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="disclaimer-icon">
+          <path d="M12 9v4M12 17h.01M10.3 3.9 2.6 17.5A2 2 0 0 0 4.3 21h15.4a2 2 0 0 0 1.7-3.5L13.7 3.9a2 2 0 0 0-3.4 0z" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p>
+          <strong>Limitations of automated trading:</strong> Automated trading systems operate based on
+          predefined logic and historical data. Market conditions change, and no system can account for
+          every scenario. Historical or backtested results, once published, will not guarantee future
+          performance. Automated trading involves risk, including the potential loss of capital.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACCESS CTA ============ -->
+  <section class="cta-section" id="access">
     <div class="container cta-content reveal">
-      <h2 class="cta-title">Trade smarter. Grow together.</h2>
-      <p class="cta-desc">Join a community of traders sharing ideas, strategies and insights.</p>
-      <button type="button" class="btn btn-primary btn-lg">Join Community</button>
+      <h2 class="cta-title">Your gold trading journey starts here.</h2>
+      <p class="cta-desc">Discover a more systematic approach to automated gold trading with TopG Algo.</p>
+      <button type="button" class="btn btn-primary btn-lg" id="getAccessBtn">Get TopG Algo Access <span aria-hidden="true">→</span></button>
     </div>
   </section>
 
@@ -223,51 +326,81 @@
 
         <div class="faq-item">
           <button class="faq-question" id="faq-q1" aria-expanded="false" aria-controls="faq-a1">
-            <span>What is DETwal?</span>
+            <span>What is TopG Algo?</span>
             <span class="faq-icon" aria-hidden="true"></span>
           </button>
           <div class="faq-answer" id="faq-a1" role="region" aria-labelledby="faq-q1">
-            <p>DETwal is a trading technology ecosystem that brings together journaling, analytics, market intelligence and community tools in a single platform.</p>
+            <p>TopG Algo is an automated trading solution by DETwal, built to execute a systematic strategy on the gold (XAUUSD) market using predefined rules and risk-management settings.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question" id="faq-q2" aria-expanded="false" aria-controls="faq-a2">
-            <span>Is DETwal a broker or trading platform?</span>
+            <span>How does automated gold trading work?</span>
             <span class="faq-icon" aria-hidden="true"></span>
           </button>
           <div class="faq-answer" id="faq-a2" role="region" aria-labelledby="faq-q2">
-            <p>No. DETwal is a technology layer built to support your trading process — it is not a broker and does not execute trades on your behalf through a brokerage account.</p>
+            <p>TopG Algo monitors market conditions against its systematic logic and executes eligible trade setups automatically, based on the strategy rules and your configured preferences.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question" id="faq-q3" aria-expanded="false" aria-controls="faq-a3">
-            <span>Do I need trading experience to use DETwal?</span>
+            <span>Which trading platform will TopG Algo support?</span>
             <span class="faq-icon" aria-hidden="true"></span>
           </button>
           <div class="faq-answer" id="faq-a3" role="region" aria-labelledby="faq-q3">
-            <p>DETwal is designed to be useful at different experience levels, from traders refining their process to those exploring tools and market analysis for the first time.</p>
+            <p>Supported platform details will be confirmed and published as TopG Algo access becomes available. Check back or contact support for the latest compatibility information.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question" id="faq-q4" aria-expanded="false" aria-controls="faq-a4">
-            <span>Is my data secure?</span>
+            <span>Can I configure my own risk settings?</span>
             <span class="faq-icon" aria-hidden="true"></span>
           </button>
           <div class="faq-answer" id="faq-a4" role="region" aria-labelledby="faq-q4">
-            <p>Data protection is a core part of how DETwal is being built. Technical details on security practices will be published as the platform rolls out.</p>
+            <p>Yes. TopG Algo supports configurable trading preferences, allowing you to set parameters and risk limits within the supported options.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question" id="faq-q5" aria-expanded="false" aria-controls="faq-a5">
-            <span>Can I use DETwal alongside my existing broker?</span>
+            <span>Does TopG Algo guarantee profits?</span>
             <span class="faq-icon" aria-hidden="true"></span>
           </button>
           <div class="faq-answer" id="faq-a5" role="region" aria-labelledby="faq-q5">
-            <p>Yes. DETwal is designed to complement your existing setup rather than replace it, acting as a layer for journaling, analysis and insight.</p>
+            <p>No. No trading system, automated or otherwise, can guarantee profits. Trading gold involves risk, and losses are possible. TopG Algo applies a systematic, disciplined approach but does not eliminate market risk.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" id="faq-q6" aria-expanded="false" aria-controls="faq-a6">
+            <span>Do I need to keep my computer running?</span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer" id="faq-a6" role="region" aria-labelledby="faq-q6">
+            <p>Runtime requirements depend on the final hosting setup for your execution environment. Specific requirements will be outlined during onboarding and in your dashboard.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" id="faq-q7" aria-expanded="false" aria-controls="faq-a7">
+            <span>How can I get access?</span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer" id="faq-a7" role="region" aria-labelledby="faq-q7">
+            <p>You can create a DETwal account and choose an available TopG Algo access plan once our access process is live. Use the "Get TopG Algo Access" button to stay informed.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" id="faq-q8" aria-expanded="false" aria-controls="faq-a8">
+            <span>How can I contact DETwal support?</span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer" id="faq-a8" role="region" aria-labelledby="faq-q8">
+            <p>Our Help Desk, linked in the footer, will connect you with DETwal support for any questions regarding TopG Algo or your account.</p>
           </div>
         </div>
 
@@ -283,24 +416,24 @@
 
     <div class="footer-brand">
       <span class="logo-text">DET<span class="accent">wal</span></span>
-      <p>A premium ecosystem for traders who want to think, analyze and grow with precision.</p>
+      <p>DETwal builds disciplined, technology-driven automated trading solutions for the gold market.</p>
     </div>
 
     <div class="footer-col">
-      <h4>Products</h4>
+      <h4>Product</h4>
       <ul>
-        <li><a href="#products">DETwal Algo</a></li>
-        <li><a href="#products">Trade Analytics</a></li>
-        <li><a href="#products">Market Intelligence</a></li>
+        <li><a href="#topg-algo">TopG Algo</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#faq">FAQ</a></li>
       </ul>
     </div>
 
     <div class="footer-col">
-      <h4>Community</h4>
+      <h4>Account</h4>
       <ul>
-        <li><a href="#community">Join Community</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#">Login</a></li>
+        <li><a href="#">Sign Up</a></li>
+        <li><a href="#">Help Desk</a></li>
       </ul>
     </div>
 
@@ -317,8 +450,12 @@
 
   <div class="footer-bottom">
     <div class="container footer-bottom-inner">
-      <p>&copy; <span id="year"></span> DETwal. All rights reserved.</p>
-      <p class="footer-disclaimer">Trading involves risk. DETwal provides tools and information only — not financial advice.</p>
+      <p>&copy; <span id="year">2026</span> DETwal. All rights reserved.</p>
+      <p class="footer-disclaimer">
+        Automated trading involves significant risk, including the potential loss of capital.
+        TopG Algo does not guarantee profits. Past or backtested performance, once published,
+        does not guarantee future results. Trade responsibly.
+      </p>
     </div>
   </div>
 </footer>
