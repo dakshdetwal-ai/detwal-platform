@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',()=>{const year=document.getElementById('year');if(year)year.textContent=new Date().getFullYear();document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in-view'));});
