@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Your Account — DETwal</title>
+<meta name="description" content="Create your DETwal account to get access to TopG Algo, our automated gold trading technology.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/signup.css">
+</head>
+<body class="auth-body">
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header">
+  <div class="container nav-container">
+
+    <a href="index.html" class="logo" aria-label="DETwal — Home">
+      <span class="logo-text">DET<span class="accent">wal</span></span>
+    </a>
+
+    <nav class="auth-header-nav" aria-label="Secondary navigation">
+      <span class="auth-header-text">Already have an account?</span>
+      <a href="login.html" class="btn btn-ghost">Login</a>
+    </nav>
+
+  </div>
+</header>
+
+<!-- ============ MAIN ============ -->
+<main id="main" class="auth-main">
+  <div class="auth-bg" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <div class="container auth-container">
+    <div class="auth-card reveal">
+
+      <div class="auth-card-header">
+        <span class="hero-badge">DETwal Account</span>
+        <h1 class="auth-title">Create your account</h1>
+        <p class="auth-subtitle">Sign up to get access to TopG Algo and your DETwal dashboard.</p>
+      </div>
+
+      <form class="auth-form" id="signupForm" novalidate>
+
+        <!-- Full Name -->
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            autocomplete="name"
+            placeholder="John Carter"
+            aria-describedby="fullNameError"
+            required
+          >
+          <p class="field-error" id="fullNameError" role="alert"></p>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            aria-describedby="emailError"
+            required
+          >
+          <p class="field-error" id="emailError" role="alert"></p>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="new-password"
+              placeholder="Create a password"
+              aria-describedby="passwordError passwordHint"
+              required
+            >
+            <button type="button" class="toggle-password" data-target="password" aria-label="Show password" aria-pressed="false">
+              <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" hidden>
+                <path d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.9 5.1A10.4 10.4 0 0 1 12 5c7 0 10.5 7 10.5 7a13.2 13.2 0 0 1-3 3.9M6.1 6.1A13.1 13.1 0 0 0 1.5 12s3.5 7 10.5 7c1.3 0 2.5-.2 3.6-.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="field-hint" id="passwordHint">Minimum 8 characters, including a letter and a number.</p>
+          <p class="field-error" id="passwordError" role="alert"></p>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              autocomplete="new-password"
+              placeholder="Re-enter your password"
+              aria-describedby="confirmPasswordError"
+              required
+            >
+            <button type="button" class="toggle-password" data-target="confirmPassword" aria-label="Show password" aria-pressed="false">
+              <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" hidden>
+                <path d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.9 5.1A10.4 10.4 0 0 1 12 5c7 0 10.5 7 10.5 7a13.2 13.2 0 0 1-3 3.9M6.1 6.1A13.1 13.1 0 0 0 1.5 12s3.5 7 10.5 7c1.3 0 2.5-.2 3.6-.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="field-error" id="confirmPasswordError" role="alert"></p>
+        </div>
+
+        <!-- Terms -->
+        <div class="form-group form-group-checkbox">
+          <label class="checkbox-label" for="terms">
+            <input type="checkbox" id="terms" name="terms" required>
+            <span class="checkbox-box" aria-hidden="true"></span>
+            <span class="checkbox-text">
+              I agree to the <a href="#" target="_blank" rel="noopener">Terms of Service</a>,
+              <a href="#" target="_blank" rel="noopener">Privacy Policy</a> and
+              <a href="#" target="_blank" rel="noopener">Risk Disclosure</a>.
+            </span>
+          </label>
+          <p class="field-error" id="termsError" role="alert"></p>
+        </div>
+
+        <!-- Status message (no fake success claims) -->
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+
+        <button type="submit" class="btn btn-primary btn-lg auth-submit">Create Account</button>
+
+      </form>
+
+      <p class="auth-footer-text">
+        Already have an account? <a href="login.html">Log in</a>
+      </p>
+
+    </div>
+  </div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer auth-footer">
+  <div class="container footer-bottom-inner">
+    <p>&copy; <span id="year">2026</span> DETwal. All rights reserved.</p>
+    <p class="footer-disclaimer">
+      Automated trading involves significant risk, including the potential loss of capital.
+      TopG Algo does not guarantee profits.
+    </p>
+  </div>
+</footer>
+
+<script src="js/signup.js" defer></script>
+</body>
+</html>
