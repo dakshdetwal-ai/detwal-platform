@@ -1,0 +1,328 @@
+/* ==========================================================================
+   DETwal — Login Page Styles
+   Extends tokens and base styles defined in style.css.
+   Shares core auth layout patterns with signup.css for consistency.
+   ========================================================================== */
+
+.auth-body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header (secondary nav variant) */
+.auth-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.auth-header-text {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* Main / Background */
+.auth-main {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  overflow: hidden;
+}
+
+.auth-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.auth-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* Auth Card */
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 44px 40px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+}
+
+.auth-card-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth-card-header .hero-badge {
+  margin-bottom: 18px;
+}
+
+.auth-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+
+.auth-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+}
+
+/* Form */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.forgot-link {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--purple-light);
+  transition: color var(--transition);
+}
+.forgot-link:hover { color: var(--text-primary); }
+
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 13px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.94rem;
+  font-family: var(--font);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-group input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--purple-light);
+  box-shadow: 0 0 0 3px var(--purple-dim);
+}
+
+.form-group.has-error input {
+  border-color: #E5566B;
+}
+
+.field-error {
+  font-size: 0.8rem;
+  color: #FF8080;
+  min-height: 1em;
+  display: none;
+}
+
+.form-group.has-error .field-error {
+  display: block;
+}
+
+/* Password visibility toggle */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 48px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 6px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  border-radius: 8px;
+  transition: color var(--transition), background var(--transition);
+}
+
+.toggle-password:hover {
+  color: var(--purple-light);
+  background: var(--purple-dim);
+}
+
+.toggle-password svg {
+  width: 19px;
+  height: 19px;
+}
+
+/* Checkbox */
+.form-group-checkbox {
+  flex-direction: row;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+}
+
+.checkbox-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-box {
+  flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+  border: 1px solid var(--border-hover);
+  border-radius: 5px;
+  background: var(--bg);
+  position: relative;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.checkbox-label input:checked ~ .checkbox-box {
+  background: var(--purple);
+  border-color: var(--purple);
+}
+
+.checkbox-label input:checked ~ .checkbox-box::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  width: 5px;
+  height: 9px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-label input:focus-visible ~ .checkbox-box {
+  outline: 2px solid var(--purple-light);
+  outline-offset: 2px;
+}
+
+/* Form status */
+.form-status {
+  font-size: 0.86rem;
+  min-height: 1.2em;
+  color: var(--text-secondary);
+}
+
+.form-status.status-error { color: #FF8080; }
+.form-status.status-info { color: var(--purple-light); }
+
+/* Submit Button + Loading State */
+.auth-submit {
+  width: 100%;
+  margin-top: 4px;
+  position: relative;
+}
+
+.auth-submit:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Footer Links */
+.auth-footer-text {
+  text-align: center;
+  margin-top: 28px;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.auth-footer-text a {
+  color: var(--purple-light);
+  font-weight: 600;
+}
+.auth-footer-text a:hover { color: var(--text-primary); }
+
+.auth-back-home {
+  text-align: center;
+  margin-top: 14px;
+}
+
+.auth-back-home a {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  transition: color var(--transition);
+}
+.auth-back-home a:hover { color: var(--purple-light); }
+
+/* Footer (compact variant for auth pages) */
+.auth-footer {
+  padding-top: 32px;
+}
+
+.auth-footer .footer-bottom-inner {
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 560px) {
+  .auth-card { padding: 34px 24px; }
+  .auth-header-text { display: none; }
+}
+
+@media (max-width: 380px) {
+  .label-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
