@@ -3,12 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0; url=/detwal/plans.html">
   <title>TopG Algo Plans — DETwal</title>
-  <script>window.location.replace("/detwal/plans.html");</script>
+  <meta name="description" content="Explore Basic and Premium access plans for TopG Algo by DETwal.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/detwal/css/style.css">
+  <link rel="stylesheet" href="/detwal/css/plans.css">
 </head>
 <body>
-  <p>Opening TopG Algo plans...</p>
-  <a href="/detwal/plans.html">Open plans</a>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="/detwal/" class="logo" aria-label="DETwal home"><span class="logo-text">DET<span class="accent">wal</span></span></a>
+      <nav class="plans-nav" aria-label="Main navigation">
+        <a href="/detwal/">Home</a>
+        <a href="/detwal/login.html" class="btn btn-ghost">Login</a>
+        <a href="/detwal/signup.html" class="btn btn-primary">Sign Up</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="plans-hero">
+      <div class="container plans-hero-content reveal">
+        <span class="hero-badge">TopG Algo by DETwal</span>
+        <h1 class="plans-title">Choose your <span class="gradient-text">access plan.</span></h1>
+        <p class="plans-description">One automated gold-trading bot. Two monthly access options, built around different usage limits.</p>
+        <p class="trial-note">Every plan starts with a 7-day free trial.</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="plans-grid">
+          <article class="plan-card reveal">
+            <span class="plan-eyebrow">Essential access</span>
+            <h2>Basic</h2>
+            <p class="plan-price">Coming soon <span>/ month</span></p>
+            <p class="plan-summary">Get essential access to the TopG Algo automated gold-trading bot.</p>
+            <ul class="plan-list">
+              <li>TopG Algo bot access</li>
+              <li>Basic usage limits</li>
+              <li>7-day free trial</li>
+              <li>Monthly billing</li>
+            </ul>
+            <a href="/detwal/signup.html" class="btn btn-ghost btn-lg plan-cta">Create an account</a>
+          </article>
+          <article class="plan-card plan-card-premium reveal">
+            <span class="plan-eyebrow">Expanded limits</span>
+            <h2>Premium</h2>
+            <p class="plan-price">Coming soon <span>/ month</span></p>
+            <p class="plan-summary">Get expanded access limits when you need more room to use TopG Algo.</p>
+            <ul class="plan-list">
+              <li>TopG Algo bot access</li>
+              <li>Expanded usage limits</li>
+              <li>7-day free trial</li>
+              <li>Monthly billing</li>
+            </ul>
+            <a href="/detwal/signup.html" class="btn btn-primary btn-lg plan-cta">Create an account</a>
+          </article>
+        </div>
+        <p class="plans-disclaimer">Both plans provide access to the same TopG Algo bot; the difference is the available usage limits. Exact limits and final monthly prices will be published before launch. A free trial does not guarantee trading results. Automated trading involves risk, including possible loss of capital.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer plans-footer">
+    <div class="container footer-bottom-inner">
+      <p>&copy; <span id="year">2026</span> DETwal. All rights reserved.</p>
+      <p class="footer-disclaimer">TopG Algo does not guarantee profits. Trading involves risk.</p>
+    </div>
+  </footer>
+  <script src="/detwal/js/plans.js" defer></script>
 </body>
 </html>
