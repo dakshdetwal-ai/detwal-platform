@@ -132,7 +132,7 @@ function initSignupValidation() {
 
 function getFriendlyAuthError(error) {
   const message = (error && error.message) ? error.message : 'Something went wrong. Please try again.';
-  if (/already registered|already exists/i.test(message)) return 'An account with this email may already exist. Try logging in.';
+  if (/already registered|already exists|user already registered|email.*(taken|exists)/i.test(message)) return 'This email is already registered. Please log in or use Forgot Password.';
   if (/password should be|weak password/i.test(message)) return 'Your password does not meet the security requirements.';
   if (/rate limit|too many requests/i.test(message)) return 'Too many attempts. Please wait a while and try again.';
   return message;
