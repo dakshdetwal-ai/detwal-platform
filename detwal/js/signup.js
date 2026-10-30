@@ -67,11 +67,18 @@ function initSignupValidation() {
         password: fields.password.value,
         options: {
           data: { full_name: fields.fullName.value.trim() },
-          emailRedirectTo: 'https://detwal.in/login.html'
+          emailRedirectTo: 'https://detwal.in/detwal/login.html'
         }
       });
 
       if (error) throw error;
+
+      // Supabase may return a generic success response for an existing email.
+      // With email confirmation enabled, an empty identities array identifies that case.
+      if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        setStatus('This email is already registered. Please log in or use Forgot Password.', 'error');
+        return;
+      }
 
       if (data.session) {
         setStatus('Your account has been created. You are now signed in.', 'success');
