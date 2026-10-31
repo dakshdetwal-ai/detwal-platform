@@ -55,9 +55,9 @@ jobs:
 
               if [ "$status" = "200" ] && echo "$response" | jq -e '.success == true' >/dev/null; then
                 # R2 returns its collection under result.buckets; other APIs return result directly.
-                count=$(echo "$response" | jq '(.result.buckets // .result // []) | if type == "array" then length else 0 end')
+                count=$(echo "$response" | jq '(.result | if type == "object" then (.buckets // []) else . end) | if type == "array" then length else 0 end')
                 echo "$response" | jq -r '
-                  (.result.buckets // .result // []) |
+                  (.result | if type == "object" then (.buckets // []) else . end) |
                   if type == "array" then .[] else empty end |
                   if type == "object" then
                     "name=" + (.name // .title // "unnamed") +
