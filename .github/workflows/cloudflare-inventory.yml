@@ -1,0 +1,62 @@
+name: Cloudflare Resource Inventory
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect Cloudflare resources (read-only)
+        shell: bash
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN secret is missing"
+            exit 1
+          fi
+
+          call_api() {
+            curl --silent --show-error --fail \
+              --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              --header "Content-Type: application/json" "$1"
+          }
+
+          accounts_json=$(call_api "https://api.cloudflare.com/client/v4/accounts")
+          echo "$accounts_json" | jq -e '.success == true' >/dev/null
+
+          account_count=$(echo "$accounts_json" | jq '.result | length')
+          echo "Accessible account count: $account_count"
+
+          while IFS= read -r account; do
+            account_id=$(echo "$account" | jq -r '.id')
+            account_name=$(echo "$account" | jq -r '.name')
+            echo ""
+            echo "===== ACCOUNT: $account_name ($account_id) ====="
+
+            for item in "Workers:workers/scripts" "D1:d1/database" "KV:storage/kv/namespaces" "R2:r2/buckets"; do
+              label="${item%%:*}"
+              endpoint="${item#*:}"
+              echo ""
+              echo "--- $label ---"
+              if result=$(call_api "https://api.cloudflare.com/client/v4/accounts/$account_id/$endpoint"); then
+                if echo "$result" | jq -e '.success == true' >/dev/null; then
+                  echo "$result" | jq -r '.result[]? | "name=" + (.name // .title // "unnamed") + " id=" + (.id // .uuid // "n/a")'
+                  count=$(echo "$result" | jq '.result | length')
+                  echo "$label count: $count"
+                else
+                  echo "$result" | jq -r '.errors[]?.message // "Cloudflare API returned an error"'
+                fi
+              else
+                echo "Could not read $label. Check this token's account-level Read permission."
+              fi
+            done
+          done < <(echo "$accounts_json" | jq -c '.result[]')
+
+          echo ""
+          echo "Inventory finished. This workflow does not create, edit, or delete resources."
