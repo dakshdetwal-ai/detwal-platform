@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordError = document.getElementById('passwordError');
     const email = emailInput?.value.trim().toLowerCase() || '';
     const password = passwordInput?.value || '';
-    const validEmail = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
+    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     if (emailError) emailError.textContent = '';
     if (passwordError) passwordError.textContent = '';
