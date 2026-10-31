@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TopG Algo Store — DETwal</title>
+  <meta name="description" content="Choose your TopG Algo access plan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/store.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo"><span class="logo-text">DET<span class="accent">wal</span></span></a>
+      <nav class="store-nav"><span id="accountEmail">Your account</span><button id="logoutButton" class="btn btn-ghost">Log out</button></nav>
+    </div>
+  </header>
+  <main>
+    <section class="store-hero">
+      <div class="container">
+        <span class="hero-badge">TopG Algo by DETwal</span>
+        <h1>Choose your <span class="gradient-text">access.</span></h1>
+        <p>One automated gold-trading system. Choose the terminal capacity that fits your setup.</p>
+      </div>
+    </section>
+    <section class="container store-content">
+      <article class="intro-offer">
+        <span class="offer-tag">New customer offer</span>
+        <h2>Try TopG Algo for 7 days</h2>
+        <p class="offer-price">₹299 <span>one-time trial entry</span></p>
+        <p>Available only with the Starter plan (₹799/month). If you continue after the trial, receive a <strong>one-time ₹299 discount</strong> on any one of the three plans. The discount does not expire, but can only be used once.</p>
+        <p class="offer-fineprint">The 7-day trial is paid, not free. The ₹299 trial fee is separate from the plan purchase and is not described as refundable.</p>
+      </article>
+      <div class="store-heading"><h2>Monthly plans</h2><p>Prices in Indian rupees (INR).</p></div>
+      <div class="store-grid">
+        <article class="store-card">
+          <span class="plan-label">Starter · 1 terminal</span>
+          <h3>Basic</h3>
+          <p class="store-price">₹799 <span>/ month</span></p>
+          <ul><li>TopG Algo access</li><li>1 MT5 terminal</li><li>Signal-based execution</li><li>Monthly access</li></ul>
+          <button class="btn btn-ghost plan-button" disabled>Purchases opening soon</button>
+        </article>
+        <article class="store-card featured">
+          <span class="plan-label">Growth · 2 terminals</span>
+          <h3>Pro</h3>
+          <p class="store-price">₹1,399 <span>/ month</span></p>
+          <ul><li>TopG Algo access</li><li>Up to 2 MT5 terminals</li><li>Signal-based execution</li><li>Monthly access</li></ul>
+          <button class="btn btn-primary plan-button" disabled>Purchases opening soon</button>
+        </article>
+        <article class="store-card">
+          <span class="plan-label">Scale · 4 terminals</span>
+          <h3>Premium</h3>
+          <p class="store-price">₹2,499 <span>/ month</span></p>
+          <ul><li>TopG Algo access</li><li>Up to 4 MT5 terminals</li><li>Signal-based execution</li><li>Monthly access</li></ul>
+          <button class="btn btn-ghost plan-button" disabled>Purchases opening soon</button>
+        </article>
+      </div>
+      <section class="discount-panel">
+        <h2>Your ₹299 continuation discount</h2>
+        <p>After completing the paid 7-day Starter trial, you can apply ₹299 off one purchase of Basic, Pro, or Premium. It is a one-time discount per eligible customer and has no expiry.</p>
+        <div class="discount-prices"><span>Basic <strong>₹500</strong></span><span>Pro <strong>₹1,100</strong></span><span>Premium <strong>₹2,200</strong></span></div>
+        <p class="offer-fineprint">Discounted totals shown are before any applicable taxes or payment fees. Trial eligibility and discount redemption will need server-side verification before payments launch.</p>
+      </section>
+      <p class="risk-note">TopG Algo is automated trading software, not a guarantee of returns. Trading involves substantial risk, including loss of capital. Past or simulated results do not guarantee future performance.</p>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="container footer-bottom-inner"><p>© <span id="year">2026</span> DETwal. All rights reserved.</p><p class="footer-disclaimer">Automated trading involves risk. Use only funds you can afford to lose.</p></div></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/store.js" defer></script>
+</body>
+</html>
