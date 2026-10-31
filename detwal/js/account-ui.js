@@ -1,8 +1,15 @@
 /* Shared DETwal account navigation. Load after supabase-client.js. */
 document.addEventListener('DOMContentLoaded', async () => {
   const client = window.detwalSupabase;
-  const host = document.querySelector('.nav-actions, .auth-header-nav, .store-nav') ||
-    document.querySelector('.site-header .nav-container');
+  let host = document.querySelector('.nav-actions, .auth-header-nav, .store-nav');
+  if (!host) {
+    const navContainer = document.querySelector('.site-header .nav-container');
+    if (navContainer) {
+      host = document.createElement('div');
+      host.className = 'nav-actions';
+      navContainer.appendChild(host);
+    }
+  }
   if (!host || !client) return;
   let session = null;
   try {
