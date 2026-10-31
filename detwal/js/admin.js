@@ -1,10 +1,269 @@
-document.addEventListener('DOMContentLoaded',()=>{const $=id=>document.getElementById(id),API='https://detwal-api.dakshdetwal10.workers.dev',token=sessionStorage.getItem('detwal_admin_token');if(!token){location.replace('login.html');return}const notice=m=>{$('notice').textContent=m};const esc=v=>String(v??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));async function api(path,opts={}){let r=await fetch(API+path,{...opts,headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,...opts.headers}}),d={};try{d=await r.json()}catch{}if(r.status===401||r.status===403){sessionStorage.clear();location.replace('login.html')}if(!r.ok||d.success===false)throw Error(d.message||'Worker endpoint not available: '+path);return d.data??d}function table(id,rows,cols){$(id).innerHTML=!rows?.length?'<p class="muted">No records found.</p>':'<div style="overflow:auto"><table><thead><tr>'+cols.map(c=>'<th>'+c[0]+'</th>').join('')+'</tr></thead><tbody>'+rows.map(x=>'<tr>'+cols.map(c=>'<td>'+c[1](x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>'}const act=(t,a,id)=>'<button data-act="'+a+'" data-id="'+esc(id)+'">'+t+'</button>';let users=[],ticketId=null;
-async function load(tab){try{if(tab==='payments'){let d=await api('/admin/payments');table('paymentsTable',d,[['Customer',x=>esc(x.customer_name)],['Email',x=>esc(x.email)],['Plan',x=>esc(x.plan_id)],['Amount',x=>'₹'+esc(x.amount_inr)],['UTR',x=>esc(x.utr_reference)],['Status',x=>esc(x.status)],['Action',x=>act('Approve','approve',x.id)+act('Reject','reject',x.id)]]);}
-if(tab==='customers'){users=await api('/admin/users');renderUsers(users)}
-if(tab==='tickets'){let d=await api('/admin/tickets');$('ticketsList').innerHTML='';(d||[]).forEach(t=>{let el=document.createElement('article');el.className='ticket';let title=document.createElement('h3');title.textContent='#'+t.id+' · '+t.subject+' · '+t.status;let meta=document.createElement('p');meta.className='muted';meta.textContent=t.user_email+' · '+t.created_at;let body=document.createElement('p');body.textContent=t.message;let input=document.createElement('textarea');input.placeholder='Reply to this customer…';let send=document.createElement('button');send.className='primary';send.textContent='Send reply';send.onclick=async()=>{try{await api('/admin/tickets/'+t.id+'/reply',{method:'POST',body:JSON.stringify({message:input.value.trim()})});notice('Reply submitted.');input.value=''}catch(e){notice(e.message)}};let close=document.createElement('button');close.textContent='Close ticket';close.onclick=async()=>{try{await api('/admin/tickets/'+t.id+'/close',{method:'POST',body:'{}'});load('tickets')}catch(e){notice(e.message)}};el.append(title,meta,body,input,send,close);$('ticketsList').append(el)})}
-if(tab==='plans'){let d=await api('/admin/plans');table('plansTable',d,[['ID',x=>esc(x.id)],['Name',x=>esc(x.name)],['Price',x=>'₹'+esc(x.price)],['Period',x=>esc(x.period)],['Action',x=>act('Edit','editplan',x.id)+act('Delete','delplan',x.id)]])}
-if(tab==='coupons'){let d=await api('/admin/coupons');table('couponsTable',d,[['Code',x=>esc(x.code)],['Discount',x=>esc(x.discount_type)+' '+esc(x.value)],['Used',x=>esc(x.used_count)],['Expires',x=>esc(x.expires_at)],['Action',x=>act('Delete','delcoupon',x.id)]])}
-if(tab==='activity'){let d=await api('/admin/bot-activity');table('activityTable',d,[['Email',x=>esc(x.email)],['Plan',x=>esc(x.plan)],['Status',x=>esc(x.status)],['Last seen',x=>esc(x.last_seen)]])}}catch(e){notice(e.message)}}
-function renderUsers(list){table('customersTable',list,[['Name',x=>esc(x.name||x.full_name)],['Email',x=>esc(x.email)],['Phone',x=>esc(x.phone)],['Joined',x=>esc(x.created_at)],['Subscription',x=>esc(x.plan||x.subscription||'None')],['Status',x=>esc(x.status||x.account_status)],['Actions',x=>act('Restrict','restrict',x.email)+act('Unrestrict','unrestrict',x.email)]])}
-async function overview(){try{let d=await api('/admin/overview'),m=d.metrics||d;$('usersCount').textContent=m.total_users??m.users??'—';$('paidCount').textContent=m.paid_subscriptions??m.paidSubscriptions??'—';$('pendingCount').textContent=m.pending_payments??m.pendingPayments??'—';$('ticketsCount').textContent=m.open_tickets??m.openTickets??'—';$('botsCount').textContent=m.active_bots??m.activeBots??'—';$('adminApp').classList.remove('hidden');notice('Admin authenticated.');}catch(e){notice(e.message)}}
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['payments','customers','tickets','plans','coupons','activity'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));load(b.dataset.tab)});document.body.addEventListener('click',async e=>{let b=e.target.closest('[data-act]');if(!b)return;let a=b.dataset.act,id=b.dataset.id;try{if(a==='approve'||a==='reject'){await api('/admin/payments/'+id+'/'+(a==='approve'?'approve':'reject'),{method:'POST',body:'{}'});notice('Payment updated');load('payments')}if(a==='restrict'||a==='unrestrict'){let h=a==='restrict'?prompt('Restriction duration in hours. Enter 0 for indefinite:'):null;if(a==='restrict'&&h===null)return;await api('/admin/users/restriction',{method:'POST',body:JSON.stringify({email:id,restricted:a==='restrict',hours:h===null?null:Number(h)})});notice('User access updated');load('customers')}if(a==='delplan'&&confirm('Delete this plan?')){await api('/admin/plans/'+id,{method:'DELETE'});load('plans')}if(a==='delcoupon'&&confirm('Delete this coupon?')){await api('/admin/coupons/'+id,{method:'DELETE'});load('coupons')}if(a==='editplan'){let p=await api('/admin/plans/'+id);p=p.plan||p;$('planForm').classList.remove('hidden');$('pid').value=p.id;$('pid').disabled=true;$('pname').value=p.name;$('pprice').value=p.price;$('pperiod').value=p.period;$('pterminals').value=p.terminals;$('pdesc').value=p.description||''}}catch(x){notice(x.message)}});$('userSearch').oninput=()=>renderUsers(users.filter(u=>[u.name,u.full_name,u.email,u.phone].some(v=>String(v||'').toLowerCase().includes($('userSearch').value.toLowerCase()))));$('newPlan').onclick=()=>{$('planForm').classList.remove('hidden');$('pid').disabled=false};$('cancelPlan').onclick=()=>$('planForm').classList.add('hidden');$('savePlan').onclick=async()=>{try{await api('/admin/plans',{method:'POST',body:JSON.stringify({id:$('pid').value,name:$('pname').value,price:Number($('pprice').value),period:$('pperiod').value,terminals:Number($('pterminals').value),description:$('pdesc').value})});$('planForm').classList.add('hidden');load('plans')}catch(e){notice(e.message)}};$('newCoupon').onclick=()=>$('couponForm').classList.remove('hidden');$('cancelCoupon').onclick=()=>$('couponForm').classList.add('hidden');$('saveCoupon').onclick=async()=>{try{await api('/admin/coupons',{method:'POST',body:JSON.stringify({code:$('ccode').value.toUpperCase(),discount_type:$('ctype').value,value:Number($('cvalue').value),usage_limit:$('climit').value?Number($('climit').value):null,expires_at:$('cexpiry').value||null})});$('couponForm').classList.add('hidden');load('coupons')}catch(e){notice(e.message)}};$('refresh').onclick=()=>overview();document.querySelector('[data-tab="payments"]').click();overview()});
+document.addEventListener('DOMContentLoaded', () => {
+  const $ = id => document.getElementById(id);
+  const API = 'https://detwal-api.dakshdetwal10.workers.dev';
+  const token = sessionStorage.getItem('detwal_admin_token');
+
+  if (!token) {
+    location.replace('login.html');
+    return;
+  }
+
+  const notice = message => { $('notice').textContent = message; };
+  const esc = value => String(value ?? '—').replace(/[&<>"']/g, char => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  })[char]);
+
+  async function api(path, options = {}) {
+    const response = await fetch(API + path, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+        ...(options.headers || {})
+      }
+    });
+    const data = await response.json().catch(() => ({}));
+    if (response.status === 401 || response.status === 403) {
+      sessionStorage.removeItem('detwal_admin_token');
+      sessionStorage.removeItem('detwal_admin_email');
+      location.replace('login.html');
+      throw new Error('Admin session expired. Please log in again.');
+    }
+    if (!response.ok || data.success === false) {
+      throw new Error(data.message || 'Backend request failed: ' + path);
+    }
+    return data;
+  }
+
+  function renderTable(id, rows, columns) {
+    const target = $(id);
+    if (!Array.isArray(rows) || rows.length === 0) {
+      target.innerHTML = '<div class="empty-note">No records found.</div>';
+      return;
+    }
+    target.innerHTML = '<table><thead><tr>' +
+      columns.map(column => '<th>' + column[0] + '</th>').join('') +
+      '</tr></thead><tbody>' +
+      rows.map(row => '<tr>' + columns.map(column => '<td>' + column[1](row) + '</td>').join('') + '</tr>').join('') +
+      '</tbody></table>';
+  }
+
+  const action = (label, type, table, id) =>
+    '<button data-act="' + type + '" data-table="' + esc(table) + '" data-id="' + esc(id) + '">' + label + '</button>';
+
+  let users = [];
+
+  async function loadPayments() {
+    const result = await api('/admin/requests');
+    const requests = result.requests || {};
+    const rows = [];
+    Object.entries(requests).forEach(([tableName, records]) => {
+      (Array.isArray(records) ? records : []).forEach(record => rows.push({ ...record, _table: tableName }));
+    });
+    renderTable('paymentsTable', rows, [
+      ['Source', row => esc(row._table)],
+      ['Customer / Email', row => esc(row.customer_name || row.user_email || row.email || row.name)],
+      ['Plan / Type', row => esc(row.plan_id || row.plan || row.type)],
+      ['Amount', row => row.amount_inr == null ? '—' : '₹' + esc(row.amount_inr)],
+      ['Reference', row => esc(row.utr_reference || row.reference || row.id)],
+      ['Status', row => esc(row.status)],
+      ['Update', row => row.id == null || !row.status ? '—' :
+        action('Approve','status-approved',row._table,row.id) +
+        action('Reject','status-rejected',row._table,row.id)]
+    ]);
+    notice('Showing records currently stored in the Cloudflare D1 request tables.');
+  }
+
+  async function loadCustomers() {
+    const result = await api('/admin/users');
+    users = Array.isArray(result.users) ? result.users : [];
+    renderUsers(users);
+  }
+
+  function renderUsers(rows) {
+    renderTable('customersTable', rows, [
+      ['Name', row => esc(row.name || row.full_name || row.customer_name)],
+      ['Email', row => esc(row.email || row.user_email)],
+      ['Phone', row => esc(row.phone || row.mobile_number)],
+      ['Joined', row => esc(row.created_at)],
+      ['Subscription', row => esc(row.plan || row.subscription || row.plan_id || 'None')],
+      ['Status', row => esc(row.status || row.account_status)],
+      ['Actions', row => {
+        const email = row.email || row.user_email;
+        return email ? action('Restrict','restrict', '', email) + action('Unrestrict','unrestrict','',email) : '—';
+      }]
+    ]);
+  }
+
+  async function loadTickets() {
+    const result = await api('/admin/tickets');
+    const tickets = Array.isArray(result.tickets) ? result.tickets : [];
+    const messages = Array.isArray(result.messages) ? result.messages : [];
+    const host = $('ticketsList');
+    host.replaceChildren();
+
+    if (!tickets.length) {
+      host.innerHTML = '<div class="empty-note">No support tickets found.</div>';
+      return;
+    }
+
+    tickets.forEach(ticket => {
+      const card = document.createElement('article');
+      card.className = 'ticket';
+      const title = document.createElement('h3');
+      title.textContent = '#' + ticket.id + ' · ' + (ticket.subject || 'Support request') + ' · ' + (ticket.status || 'open');
+      const meta = document.createElement('p');
+      meta.className = 'muted';
+      meta.textContent = (ticket.user_email || 'Unknown customer') + ' · ' + (ticket.created_at || '');
+      const message = document.createElement('p');
+      message.textContent = ticket.message || '';
+      card.append(title, meta, message);
+
+      const thread = messages.filter(item => String(item.ticket_id) === String(ticket.id));
+      thread.forEach(item => {
+        const reply = document.createElement('p');
+        reply.textContent = (item.sender || 'reply') + ': ' + (item.message || '');
+        card.append(reply);
+      });
+
+      const input = document.createElement('textarea');
+      input.placeholder = 'Write a reply…';
+      const send = document.createElement('button');
+      send.className = 'primary';
+      send.textContent = 'Send reply';
+      send.addEventListener('click', async () => {
+        const text = input.value.trim();
+        if (!text) { notice('Write a reply first.'); return; }
+        send.disabled = true;
+        try {
+          await api('/admin/tickets/reply', {
+            method: 'POST',
+            body: JSON.stringify({ ticketId: ticket.id, message: text })
+          });
+          notice('Reply saved to the ticket.');
+          await loadTickets();
+        } catch (error) {
+          notice(error.message);
+        } finally {
+          send.disabled = false;
+        }
+      });
+      card.append(input, send);
+      host.append(card);
+    });
+  }
+
+  async function load(tab) {
+    try {
+      if (tab === 'payments') await loadPayments();
+      if (tab === 'customers') await loadCustomers();
+      if (tab === 'tickets') await loadTickets();
+      if (tab === 'plans') {
+        $('plansTable').innerHTML = '<div class="empty-note">Plans API is not implemented in the Worker yet.</div>';
+        notice('Subscription plan management needs backend routes and a confirmed plans table.');
+      }
+      if (tab === 'coupons') {
+        $('couponsTable').innerHTML = '<div class="empty-note">Coupons API is not implemented in the Worker yet.</div>';
+        notice('Coupon management needs backend routes and a confirmed coupon schema.');
+      }
+      if (tab === 'activity') {
+        $('activityTable').innerHTML = '<div class="empty-note">No bot activity endpoint is configured yet.</div>';
+        notice('Bot activity is read-only and will appear once its data source is connected.');
+      }
+    } catch (error) {
+      notice(error.message);
+    }
+  }
+
+  async function overview() {
+    try {
+      const result = await api('/admin/overview');
+      const counts = result.counts || {};
+      $('usersCount').textContent = counts.users ?? '—';
+      $('paidCount').textContent = counts.subscription_orders ?? '—';
+      $('pendingCount').textContent =
+        (counts.account_requests ?? 0) +
+        (counts.news_payment_requests ?? 0) +
+        (counts.orders ?? 0) +
+        (counts.subscription_orders ?? 0);
+      $('ticketsCount').textContent = counts.support_tickets ?? '—';
+      $('botsCount').textContent = '—';
+      $('adminApp').classList.remove('hidden');
+      notice('Admin authenticated · live counts received from Cloudflare D1.');
+    } catch (error) {
+      notice(error.message);
+    }
+  }
+
+  document.querySelectorAll('[data-tab]').forEach(button => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('[data-tab]').forEach(item => item.classList.toggle('active', item === button));
+      ['payments','customers','tickets','plans','coupons','activity'].forEach(id =>
+        $(id).classList.toggle('hidden', id !== button.dataset.tab)
+      );
+      load(button.dataset.tab);
+    });
+  });
+
+  document.body.addEventListener('click', async event => {
+    const button = event.target.closest('[data-act]');
+    if (!button) return;
+    const type = button.dataset.act;
+    const id = button.dataset.id;
+    const tableName = button.dataset.table;
+
+    try {
+      if (type === 'status-approved' || type === 'status-rejected') {
+        await api('/admin/request-status', {
+          method: 'PATCH',
+          body: JSON.stringify({
+            table: tableName,
+            id,
+            status: type === 'status-approved' ? 'approved' : 'rejected'
+          })
+        });
+        notice('Request status updated.');
+        await loadPayments();
+      }
+
+      if (type === 'restrict') {
+        const hours = Number(prompt('Restrict this user for how many hours? (1–8760)'));
+        if (!Number.isFinite(hours) || hours < 1 || hours > 8760) return;
+        await api('/admin/users/restrict', {
+          method: 'POST',
+          body: JSON.stringify({ email: id, hours, reason: 'Admin restriction' })
+        });
+        notice('User restriction saved.');
+        await loadCustomers();
+      }
+
+      if (type === 'unrestrict') {
+        await api('/admin/users/unrestrict', {
+          method: 'POST',
+          body: JSON.stringify({ email: id })
+        });
+        notice('User restriction removed.');
+        await loadCustomers();
+      }
+    } catch (error) {
+      notice(error.message);
+    }
+  });
+
+  $('userSearch').addEventListener('input', () => {
+    const query = $('userSearch').value.toLowerCase();
+    renderUsers(users.filter(user =>
+      [user.name,user.full_name,user.email,user.user_email,user.phone,user.mobile_number]
+        .some(value => String(value || '').toLowerCase().includes(query))
+    ));
+  });
+
+  $('refresh').addEventListener('click', async () => {
+    await overview();
+    const active = document.querySelector('[data-tab].active')?.dataset.tab || 'payments';
+    await load(active);
+  });
+
+  overview();
+  document.querySelector('[data-tab="payments"]').click();
+});
