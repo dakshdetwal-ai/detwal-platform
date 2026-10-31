@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Dashboard — DETwal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/account.css"><link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+<header class="site-header"><div class="container nav-container"><a href="index.html" class="logo"><span class="logo-text">DET<span class="accent">wal</span></span></a><nav class="nav-actions"><a class="btn btn-ghost" href="store.html">Store</a></nav></div></header>
+<main class="dashboard-wrap">
+  <section class="dashboard-welcome"><div><span class="hero-badge">DETwal Account</span><h1>Welcome back, <span class="gradient-text" id="welcomeName">Trader</span></h1><p>Manage your account and keep track of your TopG Algo plan requests.</p></div><a class="btn btn-primary" href="store.html">Explore plans</a></section>
+  <section class="dashboard-stats" aria-label="Account overview">
+    <article class="dashboard-stat"><span>Plan requests</span><strong id="requestCount">—</strong></article>
+    <article class="dashboard-stat"><span>Approved</span><strong id="approvedCount">—</strong></article>
+    <article class="dashboard-stat"><span>Pending review</span><strong id="pendingCount">—</strong></article>
+  </section>
+  <section class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>Personal details</h2><p>Your registered account information.</p></div><a href="profile.html">Edit profile</a></div>
+    <div class="dashboard-details"><div><span>Full name</span><strong id="fullName">Loading…</strong></div><div><span>Email address</span><strong id="emailAddress">Loading…</strong></div><div><span>Mobile number</span><strong id="mobileNumber">Not added yet</strong></div><div><span>Account created</span><strong id="joinedDate">—</strong></div></div>
+  </section>
+  <section class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>My TopG Algo plans</h2><p>Your submitted plan requests and their latest review status.</p></div><a href="store.html">Buy a plan</a></div>
+    <div id="planRequests" class="plan-request-list"><p class="dashboard-muted">Loading your plan history…</p></div>
+  </section>
+  <section class="dashboard-panel dashboard-shortcuts"><h2>Account settings</h2><div><a href="profile.html">Update name or mobile number</a><a href="profile.html#passwordForm">Change password</a><a href="forgot-password.html">Forgot password</a></div></section>
+  <p class="dashboard-disclaimer">Payment requests are manually reviewed. An “Approved” status means your payment request was approved; it does not by itself confirm that your trading terminal has been configured or connected. Trading involves risk.</p>
+</main>
+<footer class="site-footer"><div class="container footer-bottom-inner"><p>© <span id="year">2026</span> DETwal. All rights reserved.</p></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/supabase-client.js"></script><script src="js/account-ui.js" defer></script><script src="js/dashboard.js" defer></script>
+</body></html>
