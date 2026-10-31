@@ -81,7 +81,8 @@ function initSignupValidation() {
       }
 
       if (data.session) {
-        setStatus('Your account has been created. You are now signed in.', 'success');
+        setStatus('Your account has been created. Opening the store…', 'success');
+        window.location.assign('store.html');
       } else {
         setStatus('Account created. Please check your email and confirm your address before logging in.', 'success');
         form.reset();
