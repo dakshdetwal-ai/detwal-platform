@@ -21,17 +21,23 @@ jobs:
             exit 1
           fi
 
-          call_api() {
-            curl --silent --show-error --fail \
+          request() {
+            curl --silent --show-error \
+              --output /tmp/cf-response.json \
+              --write-out "%{http_code}" \
               --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
               --header "Content-Type: application/json" "$1"
           }
 
-          accounts_json=$(call_api "https://api.cloudflare.com/client/v4/accounts")
+          status=$(request "https://api.cloudflare.com/client/v4/accounts")
+          if [ "$status" != "200" ]; then
+            echo "::error::Could not list Cloudflare accounts (HTTP $status)"
+            jq -r '.errors[]?.message // "Unknown API error"' /tmp/cf-response.json
+            exit 1
+          fi
+          accounts_json=$(cat /tmp/cf-response.json)
           echo "$accounts_json" | jq -e '.success == true' >/dev/null
-
-          account_count=$(echo "$accounts_json" | jq '.result | length')
-          echo "Accessible account count: $account_count"
+          echo "Accessible account count: $(echo "$accounts_json" | jq '.result | length')"
 
           while IFS= read -r account; do
             account_id=$(echo "$account" | jq -r '.id')
@@ -44,16 +50,18 @@ jobs:
               endpoint="${item#*:}"
               echo ""
               echo "--- $label ---"
-              if result=$(call_api "https://api.cloudflare.com/client/v4/accounts/$account_id/$endpoint"); then
+              status=$(request "https://api.cloudflare.com/client/v4/accounts/$account_id/$endpoint")
+              if [ "$status" = "200" ]; then
+                result=$(cat /tmp/cf-response.json)
                 if echo "$result" | jq -e '.success == true' >/dev/null; then
                   echo "$result" | jq -r '.result[]? | "name=" + (.name // .title // "unnamed") + " id=" + (.id // .uuid // "n/a")'
-                  count=$(echo "$result" | jq '.result | length')
-                  echo "$label count: $count"
+                  echo "$label count: $(echo "$result" | jq '.result | length')"
                 else
                   echo "$result" | jq -r '.errors[]?.message // "Cloudflare API returned an error"'
                 fi
               else
-                echo "Could not read $label. Check this token's account-level Read permission."
+                echo "HTTP $status"
+                jq -r '.errors[]? | "Cloudflare error code: " + (.code|tostring) + " — " + .message' /tmp/cf-response.json
               fi
             done
           done < <(echo "$accounts_json" | jq -c '.result[]')
