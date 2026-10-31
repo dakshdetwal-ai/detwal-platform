@@ -51,17 +51,28 @@ jobs:
               echo ""
               echo "--- $label ---"
               status=$(request "https://api.cloudflare.com/client/v4/accounts/$account_id/$endpoint")
-              if [ "$status" = "200" ]; then
-                result=$(cat /tmp/cf-response.json)
-                if echo "$result" | jq -e '.success == true' >/dev/null; then
-                  echo "$result" | jq -r '.result[]? | "name=" + (.name // .title // "unnamed") + " id=" + (.id // .uuid // "n/a")'
-                  echo "$label count: $(echo "$result" | jq '.result | length')"
-                else
-                  echo "$result" | jq -r '.errors[]?.message // "Cloudflare API returned an error"'
-                fi
+              response=$(cat /tmp/cf-response.json)
+
+              if [ "$status" = "200" ] && echo "$response" | jq -e '.success == true' >/dev/null; then
+                # R2 returns its collection under result.buckets; other APIs return result directly.
+                count=$(echo "$response" | jq '(.result.buckets // .result // []) | if type == "array" then length else 0 end')
+                echo "$response" | jq -r '
+                  (.result.buckets // .result // []) |
+                  if type == "array" then .[] else empty end |
+                  if type == "object" then
+                    "name=" + (.name // .title // "unnamed") +
+                    " id=" + (.id // .uuid // "n/a")
+                  else
+                    "Unexpected resource entry type: " + type
+                  end'
+                echo "$label count: $count"
               else
                 echo "HTTP $status"
-                jq -r '.errors[]? | "Cloudflare error code: " + (.code|tostring) + " — " + .message' /tmp/cf-response.json
+                echo "$response" | jq -r '
+                  if (.errors | type) == "array" and (.errors | length) > 0
+                  then .errors[] | "Cloudflare error code: " + ((.code // "unknown") | tostring) + " — " + (.message // "Unknown API error")
+                  else (.messages[]?.message // "Cloudflare API returned an unexpected response")
+                  end'
               fi
             done
           done < <(echo "$accounts_json" | jq -c '.result[]')
