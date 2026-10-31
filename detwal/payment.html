@@ -6,6 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/payment.css">
+<link rel="stylesheet" href="css/account.css">
 </head>
 <body>
 <header class="site-header"><div class="container nav-container"><a href="store.html" class="logo"><span class="logo-text">DET<span class="accent">wal</span></span></a><a href="store.html" class="btn btn-ghost">Back to Store</a></div></header>
@@ -42,4 +43,7 @@
 <div class="modal-backdrop" id="infoModal" hidden><section class="info-modal" role="dialog" aria-modal="true" aria-labelledby="infoTitle"><button class="modal-close" id="closeInfo" aria-label="Close">×</button><h2 id="infoTitle">Why do we ask for your UPI ID?</h2><p>Please enter the UPI ID <strong>you are paying from</strong> (your payer VPA), not DETwal's UPI ID. It helps us identify and match the incoming payment with your order. Your UPI ID alone does not prove payment; we also review the UTR and payment record.</p><button class="btn btn-primary" id="understood">Understood</button></section></div>
 <footer class="site-footer"><div class="container footer-bottom-inner"><p>© <span id="year">2026</span> DETwal. All rights reserved.</p><p class="footer-disclaimer">Trading involves risk. TopG Algo does not guarantee profits.</p></div></footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/supabase-client.js"></script><script src="js/payment.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/account-ui.js" defer></script>
 </body></html>
