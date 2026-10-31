@@ -55,24 +55,26 @@ document.addEventListener('DOMContentLoaded', () => {
   let users = [];
 
   async function loadPayments() {
-    const result = await api('/admin/requests');
-    const requests = result.requests || {};
-    const rows = [];
-    Object.entries(requests).forEach(([tableName, records]) => {
-      (Array.isArray(records) ? records : []).forEach(record => rows.push({ ...record, _table: tableName }));
-    });
+    const result = await api('/admin/payments');
+    const rows = Array.isArray(result.payments) ? result.payments : [];
+
     renderTable('paymentsTable', rows, [
-      ['Source', row => esc(row._table)],
-      ['Customer / Email', row => esc(row.customer_name || row.user_email || row.email || row.name)],
-      ['Plan / Type', row => esc(row.plan_id || row.plan || row.type)],
+      ['Customer / Email', row => esc(row.customer_name || row.user_email || row.email)],
+      ['Plan', row => esc(row.plan_id || row.plan)],
       ['Amount', row => row.amount_inr == null ? '—' : '₹' + esc(row.amount_inr)],
-      ['Reference', row => esc(row.utr_reference || row.reference || row.id)],
+      ['Mobile', row => esc(row.mobile_number)],
+      ['UPI ID', row => esc(row.payer_upi_id)],
+      ['UTR / Reference', row => esc(row.utr_reference || row.reference)],
+      ['Submitted', row => esc(row.created_at)],
       ['Status', row => esc(row.status)],
-      ['Update', row => row.id == null || !row.status ? '—' :
-        action('Approve','status-approved',row._table,row.id) +
-        action('Reject','status-rejected',row._table,row.id)]
+      ['Update', row => {
+        if (row.id == null || !row.status || row.status !== 'pending') return '—';
+        return action('Approve', 'payment-approved', '', row.id) +
+          action('Reject', 'payment-rejected', '', row.id);
+      }]
     ]);
-    notice('Showing records currently stored in the Cloudflare D1 request tables.');
+
+    notice('Showing payment submissions retrieved directly from Supabase.');
   }
 
   async function loadCustomers() {
@@ -191,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
       $('ticketsCount').textContent = counts.support_tickets ?? '—';
       $('botsCount').textContent = '—';
       $('adminApp').classList.remove('hidden');
-      notice('Admin authenticated · live counts received from Cloudflare D1.');
+      notice('Admin authenticated · dashboard counts loaded from connected data sources.');
     } catch (error) {
       notice(error.message);
     }
@@ -215,17 +217,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableName = button.dataset.table;
 
     try {
-      if (type === 'status-approved' || type === 'status-rejected') {
-        await api('/admin/request-status', {
+      if (type === 'payment-approved' || type === 'payment-rejected') {
+        const nextStatus = type === 'payment-approved' ? 'approved' : 'rejected';
+        const confirmed = confirm(
+          (nextStatus === 'approved' ? 'Approve' : 'Reject') +
+          ' this payment submission? Verify the UTR and received amount first.'
+        );
+        if (!confirmed) return;
+
+        button.disabled = true;
+        await api('/admin/payments/status', {
           method: 'PATCH',
-          body: JSON.stringify({
-            table: tableName,
-            id,
-            status: type === 'status-approved' ? 'approved' : 'rejected'
-          })
+          body: JSON.stringify({ id, status: nextStatus })
         });
-        notice('Request status updated.');
+        notice('Payment status updated to ' + nextStatus + '.');
         await loadPayments();
+        await overview();
       }
 
       if (type === 'restrict') {
