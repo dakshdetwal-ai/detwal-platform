@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
       throw new Error('Admin session expired. Please log in again.');
     }
     if (!response.ok || data.success === false) {
-      throw new Error(data.message || 'Backend request failed: ' + path);
+      const detail = data.detail ? ' — ' + data.detail : '';
+      throw new Error((data.message || 'Backend request failed: ' + path) + detail);
     }
     return data;
   }
@@ -140,7 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
             method: 'POST',
             body: JSON.stringify({ ticketId: ticket.id, message: text })
           });
-          notice('Reply saved to the ticket.');
+          input.value = '';
+          notice('Reply saved successfully.');
           await loadTickets();
         } catch (error) {
           notice(error.message);
@@ -256,6 +258,34 @@ document.addEventListener('DOMContentLoaded', () => {
       [user.name,user.full_name,user.email,user.user_email,user.phone,user.mobile_number]
         .some(value => String(value || '').toLowerCase().includes(query))
     ));
+  });
+
+  // Do not leave controls that look active when their backend routes do not exist yet.
+  ['newPlan','savePlan','newCoupon','saveCoupon'].forEach(id => {
+    const control = $(id);
+    if (control) {
+      control.disabled = true;
+      control.title = 'This feature needs its backend routes before it can be used.';
+    }
+  });
+
+  $('globalSearch').addEventListener('input', () => {
+    const query = $('globalSearch').value.trim().toLowerCase();
+    const active = document.querySelector('[data-tab].active')?.dataset.tab;
+    if (active === 'customers') {
+      renderUsers(users.filter(user =>
+        [user.name,user.full_name,user.email,user.user_email,user.phone,user.mobile_number]
+          .some(value => String(value || '').toLowerCase().includes(query))
+      ));
+    } else if (active === 'tickets') {
+      $('ticketsList').querySelectorAll('.ticket').forEach(card => {
+        card.hidden = query && !card.textContent.toLowerCase().includes(query);
+      });
+    } else if (active === 'payments') {
+      $('paymentsTable').querySelectorAll('tbody tr').forEach(row => {
+        row.hidden = query && !row.textContent.toLowerCase().includes(query);
+      });
+    }
   });
 
   $('refresh').addEventListener('click', async () => {
