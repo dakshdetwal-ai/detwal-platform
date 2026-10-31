@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   button.disabled=true;button.textContent='Submitting…';
   try{
    const {data:{session:current}}=await client.auth.getSession();
-   const response=await fetch('https://detwal-api.dakshdetwal10.workers.dev/tickets',{
-    method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+current.access_token},
-    body:JSON.stringify({subject,message,customer_name:$('helpName').value.trim()})
+   const response=await fetch('https://detwal-api.dakshdetwal10.workers.dev/support/tickets',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({email:current.user.email,name:$('helpName').value.trim(),subject,message})
    });
    const result=await response.json();if(!response.ok)throw Error(result.message||'Ticket submission failed');
    $('helpForm').reset();$('helpName').value=session.user.user_metadata?.full_name||session.user.user_metadata?.name||'';
