@@ -2,24 +2,30 @@ document.addEventListener('DOMContentLoaded', async () => {
  const $=id=>document.getElementById(id);
  $('year').textContent=new Date().getFullYear();
  const client=window.detwalSupabase;
- if(client){
-   try{
-     const {data:{session}}=await client.auth.getSession();
-     if(session){
-       $('helpName').value=session.user.user_metadata?.full_name||session.user.user_metadata?.name||'';
-       $('helpEmail').value=session.user.email||'';
-     }
-   }catch(error){console.warn('Could not prefill help form:',error);}
- }
- $('helpForm').addEventListener('submit',event=>{
-   event.preventDefault();
-   const name=$('helpName').value.trim();
-   const email=$('helpEmail').value.trim();
-   const subject=$('helpSubject').value;
-   const message=$('helpMessage').value.trim();
-   if(!name||!email||!subject||!message)return;
-   const body=['Hello DETwal Support,','', 'Name: '+name,'Email: '+email,'Subject: '+subject,'Query: '+message].join('\n');
-   const url='https://wa.me/916375064184?text='+encodeURIComponent(body);
-   window.location.href=url;
+ if(!client){$('helpForm').addEventListener('submit',e=>{e.preventDefault();alert('Please refresh and sign in first.');});return;}
+ let session;
+ try{const {data,error}=await client.auth.getSession();if(error)throw error;session=data.session;}catch(e){console.error(e);}
+ if(!session){location.replace('login.html?next=help-desk');return;}
+ $('helpName').value=session.user.user_metadata?.full_name||session.user.user_metadata?.name||'';
+ $('helpEmail').value=session.user.email||'';
+ $('helpEmail').readOnly=true;
+ $('helpForm').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const button=$('helpForm').querySelector('button[type="submit"]');
+  const subject=$('helpSubject').value,message=$('helpMessage').value.trim();
+  if(!subject||!message)return;
+  button.disabled=true;button.textContent='Submitting…';
+  try{
+   const {data:{session:current}}=await client.auth.getSession();
+   const response=await fetch('https://detwal-api.dakshdetwal10.workers.dev/tickets',{
+    method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+current.access_token},
+    body:JSON.stringify({subject,message,customer_name:$('helpName').value.trim()})
+   });
+   const result=await response.json();if(!response.ok)throw Error(result.message||'Ticket submission failed');
+   $('helpForm').reset();$('helpName').value=session.user.user_metadata?.full_name||session.user.user_metadata?.name||'';
+   $('helpEmail').value=session.user.email||'';
+   alert('Your support ticket was submitted. Ticket ID: '+result.ticketId);
+  }catch(error){alert('Could not submit ticket: '+error.message);}
+  finally{button.disabled=false;button.textContent='Submit support ticket';}
  });
 });
