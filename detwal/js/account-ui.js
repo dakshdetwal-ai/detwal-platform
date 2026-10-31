@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const menu = document.createElement('div');
   menu.className = 'account-dropdown';
   menu.hidden = true;
-  menu.innerHTML = '<div class="account-dropdown-user"><strong></strong><small></small></div><a href="dashboard.html">User Dashboard</a><a href="profile.html">My Profile</a><a href="forgot-password.html">Forgot password?</a><button type="button" class="account-signout">Log out</button>';
+  menu.innerHTML = '<div class="account-dropdown-user"><strong></strong><small></small></div><a href="dashboard.html">User Dashboard</a><a href="profile.html">My Profile</a><a href="forgot-password.html">Forgot password?</a><a href="help-desk.html">Help Desk</a><button type="button" class="account-signout">Log out</button>';
   menu.querySelector('.account-dropdown-user strong').textContent = name;
   menu.querySelector('.account-dropdown-user small').textContent = user.email || '';
   menu.style.position = 'fixed';
