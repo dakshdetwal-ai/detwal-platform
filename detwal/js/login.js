@@ -36,8 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const { error } = await client.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      setStatus('Login successful. Your account is signed in.', 'success');
-      // Dashboard is not deployed yet; keep the authenticated session and avoid a broken redirect.
+      setStatus('Login successful. Opening your store…', 'success');
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get('next') === 'store' ? 'store.html' : 'store.html';
+      window.location.assign(next);
     } catch (error) {
       const msg = /invalid login credentials/i.test(error.message) ? 'Email or password is incorrect.' : error.message;
       setStatus(msg || 'Unable to log in. Please try again.', 'error');
