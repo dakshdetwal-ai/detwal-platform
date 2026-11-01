@@ -90,7 +90,7 @@
       <button data-tab="tickets"><span class="nav-icon">▤</span>Support tickets</button>
       <button data-tab="plans"><span class="nav-icon">▣</span>Subscription plans</button>
       <button data-tab="coupons"><span class="nav-icon">◇</span>Coupons</button>
-      <button data-tab="activity"><span class="nav-icon">⌁</span>Bot activity</button>
+      <button data-tab="analytics">Analytics</button><button data-tab="referrals">Referrals</button><button data-tab="audit">Audit log</button><button data-tab="notifications">Notifications</button><button data-tab="activity"><span class="nav-icon">⌁</span>Bot activity</button>
     </nav>
     <div class="sidebar-bottom">
       <div class="system-card"><span class="system-dot"></span><div><strong>Admin console</strong><small>Secure session active</small></div></div>
@@ -134,6 +134,10 @@
             <div class="panel-head"><div><h2>Coupon codes</h2><span class="muted">Create and manage promotional discounts</span></div><button id="newCoupon" class="primary">+ Add coupon</button></div>
             <div id="couponsTable"></div><div id="couponForm" class="hidden"><div class="formrow"><input id="ccode" placeholder="Code"><select id="ctype"><option value="percent">Percentage</option><option value="fixed">Fixed INR</option></select><input id="cvalue" type="number" placeholder="Discount value"><input id="climit" type="number" placeholder="Usage limit"><input id="cexpiry" type="date"></div><button id="saveCoupon" class="primary">Save coupon</button><button id="cancelCoupon" class="secondary">Cancel</button></div>
           </section>
+          <section id="analytics" class="panel hidden"><div class="panel-head"><div><h2>Business analytics</h2><span class="muted">Revenue and subscription health</span></div></div><div id="analyticsContent"></div></section>
+          <section id="referrals" class="panel hidden"><div class="panel-head"><div><h2>Referral programme</h2><span class="muted">Review referral rewards and status</span></div></div><div id="referralsContent"></div></section>
+          <section id="audit" class="panel hidden"><div class="panel-head"><div><h2>Admin audit log</h2><span class="muted">Track important account and billing changes</span></div></div><div id="auditContent"></div></section>
+          <section id="notifications" class="panel hidden"><div class="panel-head"><div><h2>Notification delivery</h2><span class="muted">Customer in-app messages and email queue</span></div></div><div id="notificationsContent"></div></section>
           <section id="activity" class="panel hidden"><div class="panel-head"><div><h2>Bot activity</h2><span class="muted">Read-only status overview</span></div></div><div id="activityTable">Loading activity…</div></section>
         </div>
       </div>
