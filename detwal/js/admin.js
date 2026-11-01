@@ -2,10 +2,11 @@ document.addEventListener('DOMContentLoaded',()=>{
  const $=id=>document.getElementById(id), client=window.detwalSupabase;
  const ADMIN='dakshdetwal10@gmail.com', BASE='https://evsnwenvmwhrohyzrjgq.supabase.co/functions/v1/admin-api';
  let users=[];
+ const sessionWithTimeout=()=>Promise.race([client.auth.getSession(),new Promise((_,reject)=>setTimeout(()=>reject(Error('Supabase session check timed out. Please refresh and sign in again.')),10000))]);
  const esc=v=>String(v??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const note=m=>{$('notice').textContent=m;};
  async function api(path,options={}){
-  const {data,error}=await client.auth.getSession(); if(error||!data.session||(data.session.user.email||'').toLowerCase()!==ADMIN) throw Error('Admin session expired. Please sign in again.');
+  const {data,error}=await sessionWithTimeout(); if(error||!data.session||(data.session.user.email||'').toLowerCase()!==ADMIN) throw Error('Admin session expired. Please sign in again.');
   const res=await fetch(BASE+path,{...options,headers:{'Content-Type':'application/json','apikey':'sb_publishable_Vfy2VLbqRYB_DOsK13iuqA_9-pk4Q5t','Authorization':'Bearer '+data.session.access_token,...(options.headers||{})}});
   const body=await res.json().catch(()=>({}));if(!res.ok||body.success===false)throw Error(body.message||'Request failed');return body;
  }
@@ -47,5 +48,5 @@ document.addEventListener('DOMContentLoaded',()=>{
  $('newCoupon').onclick=()=>{$('couponForm').classList.remove('hidden');};
  $('cancelCoupon').onclick=()=>{$('couponForm').classList.add('hidden');};
  $('saveCoupon').onclick=async()=>{try{await api('/coupons',{method:'POST',body:JSON.stringify({code:$('ccode').value,discount_type:$('ctype').value,discount_value:Number($('cvalue').value),max_redemptions:$('climit').value?Number($('climit').value):null,expires_at:$('cexpiry').value?new Date($('cexpiry').value+'T23:59:59').toISOString():null})});$('couponForm').classList.add('hidden');await coupons();note('Coupon saved.');}catch(e){note(e.message);}};
- (async()=>{try{if(!client)throw Error('Supabase client unavailable.');const {data,error}=await client.auth.getSession();if(error||!data.session||(data.session.user.email||'').toLowerCase()!==ADMIN){await client.auth.signOut();location.replace('login.html');return;}await overview();await payments();note('Admin authenticated · Supabase backend connected.');}catch(e){note(e.message);}})();
+ (async()=>{try{if(!client)throw Error('Supabase client unavailable.');const {data,error}=await sessionWithTimeout();if(error||!data.session||(data.session.user.email||'').toLowerCase()!==ADMIN){await client.auth.signOut();location.replace('login.html');return;}await overview();await payments();note('Admin authenticated · Supabase backend connected.');}catch(e){note(e.message);}})();
 });
