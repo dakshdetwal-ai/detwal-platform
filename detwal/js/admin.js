@@ -39,7 +39,8 @@ document.addEventListener('DOMContentLoaded',()=>{
  }catch(err){note(err.message);}finally{b.disabled=false;}});
  $('userSearch').addEventListener('input',()=>{const q=$('userSearch').value.toLowerCase();renderUsers(users.filter(u=>[u.name,u.email,u.phone,u.plan].some(v=>String(v||'').toLowerCase().includes(q))));});
  $('globalSearch').addEventListener('input',()=>{const q=$('globalSearch').value.toLowerCase(),tab=document.querySelector('[data-tab].active')?.dataset.tab;if(tab==='customers')renderUsers(users.filter(u=>[u.name,u.email,u.phone,u.plan].some(v=>String(v||'').toLowerCase().includes(q))));else document.querySelectorAll('#'+tab+' tbody tr').forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(q));});
- $('refreshTesting').onclick=()=>load('testing');\n $('refresh').onclick=async()=>{try{await overview();const tab=document.querySelector('[data-tab].active')?.dataset.tab||'payments';await load(tab);note('Dashboard refreshed.');}catch(e){note(e.message);}};
+ $('refreshTesting').onclick=()=>load('testing');
+ $('refresh').onclick=async()=>{try{await overview();const tab=document.querySelector('[data-tab].active')?.dataset.tab||'payments';await load(tab);note('Dashboard refreshed.');}catch(e){note(e.message);}};
  $('newPlan').onclick=()=>{$('pid').disabled=false;$('pid').value='';$('pname').value='';$('pprice').value='';$('pperiod').value='30';$('pterminals').value='1';$('planForm').classList.remove('hidden');};
  $('cancelPlan').onclick=()=>{$('planForm').classList.add('hidden');$('pid').disabled=false;};
  $('savePlan').onclick=async()=>{try{await api('/plans',{method:'POST',body:JSON.stringify({id:$('pid').value.trim().toLowerCase(),name:$('pname').value,amount_inr:Number($('pprice').value),duration_days:Number($('pperiod').value)||30,terminals_limit:Number($('pterminals').value),is_active:true})});$('planForm').classList.add('hidden');$('pid').disabled=false;await plans();note('Plan saved.');}catch(e){note(e.message);}};
