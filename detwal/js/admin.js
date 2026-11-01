@@ -1,12 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
   const $ = id => document.getElementById(id);
-  const API = 'https://detwal-api.dakshdetwal10.workers.dev';
-  const token = sessionStorage.getItem('detwal_admin_token');
-
-  if (!token) {
-    location.replace('login.html');
-    return;
-  }
+  const client = window.detwalSupabase;
+  if (!client) { location.replace('login.html'); return; }
+  let adminSession = null;
+  const initialize = async () => {
+    const { data, error } = await client.auth.getSession();
+    if (error || !data.session || (data.session.user.email || '').toLowerCase() !== 'dakshdetwal10@gmail.com') {
+      await client.auth.signOut();
+      location.replace('login.html');
+      return false;
+    }
+    adminSession = data.session;
+    return true;
+  };
 
   const notice = message => { $('notice').textContent = message; };
   const esc = value => String(value ?? '—').replace(/[&<>"']/g, char => ({
@@ -14,26 +20,25 @@ document.addEventListener('DOMContentLoaded', () => {
   })[char]);
 
   async function api(path, options = {}) {
-    const response = await fetch(API + path, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-        ...(options.headers || {})
-      }
-    });
-    const data = await response.json().catch(() => ({}));
-    if (response.status === 401 || response.status === 403) {
-      sessionStorage.removeItem('detwal_admin_token');
-      sessionStorage.removeItem('detwal_admin_email');
+    const { data } = await client.auth.getSession();
+    const session = data.session;
+    if (!session || (session.user.email || '').toLowerCase() !== 'dakshdetwal10@gmail.com') {
       location.replace('login.html');
       throw new Error('Admin session expired. Please log in again.');
     }
-    if (!response.ok || data.success === false) {
-      const detail = data.detail ? ' — ' + data.detail : '';
-      throw new Error((data.message || 'Backend request failed: ' + path) + detail);
-    }
-    return data;
+    const route = path.replace(/^\\/admin/, '');
+    const response = await fetch('https://evsnwenvmwhrohyzrjgq.supabase.co/functions/v1/admin-api' + route, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': 'sb_publishable_Vfy2VLbqRYB_DOsK13iuqA_9-pk4Q5t',
+        'Authorization': 'Bearer ' + session.access_token,
+        ...(options.headers || {})
+      }
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.success === false) throw new Error(result.message || 'Admin request failed.');
+    return result;
   }
 
   function renderTable(id, rows, columns) {
@@ -184,12 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = await api('/admin/overview');
       const counts = result.counts || {};
       $('usersCount').textContent = counts.users ?? '—';
-      $('paidCount').textContent = counts.subscription_orders ?? '—';
-      $('pendingCount').textContent =
-        (counts.account_requests ?? 0) +
-        (counts.news_payment_requests ?? 0) +
-        (counts.orders ?? 0) +
-        (counts.subscription_orders ?? 0);
+      $('paidCount').textContent = counts.approved ?? counts.subscription_orders ?? '—';
+      $('pendingCount').textContent = counts.pending ?? '—';
       $('ticketsCount').textContent = counts.support_tickets ?? '—';
       $('botsCount').textContent = '—';
       $('adminApp').classList.remove('hidden');
@@ -301,6 +302,5 @@ document.addEventListener('DOMContentLoaded', () => {
     await load(active);
   });
 
-  overview();
-  document.querySelector('[data-tab="payments"]').click();
+  initialize().then(ok => { if (ok) { overview(); document.querySelector('[data-tab="payments"]').click(); } });
 });
