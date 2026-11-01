@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
       location.replace('login.html');
       throw new Error('Admin session expired. Please log in again.');
     }
-    const route = path.replace(/^\\/admin/, '');
+    const route = path.startsWith('/admin') ? path.slice(6) : path;
     const response = await fetch('https://evsnwenvmwhrohyzrjgq.supabase.co/functions/v1/admin-api' + route, {
       ...options,
       headers: {
