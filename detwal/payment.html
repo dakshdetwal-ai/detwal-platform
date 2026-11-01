@@ -1,47 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Secure UPI Checkout — DETwal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/payment.css">
-<link rel="stylesheet" href="css/account.css">
-</head>
-<body>
+<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/payment.css"><link rel="stylesheet" href="css/account.css">
+</head><body>
 <header class="site-header"><div class="container nav-container"><a href="store.html" class="logo"><span class="logo-text">DET<span class="accent">wal</span></span></a><a href="store.html" class="btn btn-ghost">Back to Store</a></div></header>
 <main class="container payment-wrap">
-  <div class="payment-heading"><span class="hero-badge">DETwal Checkout</span><h1>Complete your <span class="gradient-text">payment.</span></h1><p>Enter your details, pay using any UPI app, then submit your payment reference for review.</p></div>
-  <div class="payment-layout">
-    <section class="payment-card">
-      <h2>Customer details</h2>
-      <form id="paymentForm">
-        <label for="customerName">Full name</label><input id="customerName" name="customerName" autocomplete="name" required maxlength="80" placeholder="Enter your full name">
-        <label for="mobile">Mobile number</label><input id="mobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel" pattern="[6-9][0-9]{9}" maxlength="10" required placeholder="10-digit mobile number">
-        <label for="plan">Selected plan</label><select id="plan" name="plan" required><option value="basic">Basic — ₹799 / month</option><option value="pro">Pro — ₹1,399 / month</option><option value="premium">Premium — ₹2,499 / month</option><option value="trial">7-day Basic trial — ₹299</option></select>
-        <div class="label-with-info"><label for="payerUpi">Your UPI ID</label><button type="button" class="info-button" id="upiInfo" aria-label="Why we ask for your UPI ID">i</button></div>
-        <input id="payerUpi" name="payerUpi" required maxlength="100" placeholder="example@oksbi">
-        <p class="field-hint">Enter the UPI ID you will pay from. It helps us match your payment.</p>
-        <label for="utr">UPI transaction reference / UTR</label><input id="utr" name="utr" required minlength="8" maxlength="30" placeholder="Enter reference after paying">
-        <p class="field-hint">Find this in your UPI app's payment details.</p>
-        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-        <button type="submit" class="btn btn-primary btn-lg submit-payment" id="submitPayment">I have paid — submit for verification</button>
-      </form>
-    </section>
-    <aside class="payment-card pay-instructions">
-      <h2>Pay using UPI</h2>
-      <div class="amount-box"><span>Amount to pay</span><strong id="amount">₹799</strong><small id="planLabel">Basic monthly plan</small></div>
-      <p class="upi-label">DETwal UPI ID</p>
-      <div class="upi-copy-row"><strong id="merchantUpi">dakshdetwal@fam</strong><button type="button" class="btn btn-ghost copy-button" id="copyUpi">Copy</button></div>
-      
-      <ol class="steps"><li>Copy the UPI ID or open your UPI app.</li><li>Pay the exact amount shown above to <strong>dakshdetwal@fam</strong>.</li><li>Enter your payer UPI ID and UTR in the form.</li><li>Submit. Your request will show as <strong>Pending verification</strong>.</li></ol>
-      <p class="security-note">Never share your UPI PIN or OTP. DETwal will never ask for them.</p>
-    </aside>
-  </div>
-  <p class="bottom-note">Payments are not automatically verified by this page. Your request is submitted for manual review. Access is activated only after payment is confirmed.</p>
-</main>
+<div class="payment-heading"><span class="hero-badge">DETwal Checkout</span><h1>Complete your <span class="gradient-text">payment.</span></h1><p>Enter your details, pay using any UPI app, then submit your payment reference for review.</p></div>
+<div class="payment-layout"><section class="payment-card"><h2>Customer details</h2><form id="paymentForm">
+<label for="customerName">Full name</label><input id="customerName" name="customerName" autocomplete="name" required maxlength="80" placeholder="Enter your full name">
+<label for="mobile">Mobile number</label><input id="mobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel" pattern="[6-9][0-9]{9}" maxlength="10" required placeholder="10-digit mobile number">
+<label for="plan">Selected plan</label><select id="plan" name="plan" required><option value="">Loading plans…</option></select>
+<label for="couponCode">Coupon code (optional)</label><div class="coupon-row"><input id="couponCode" maxlength="32" placeholder="Enter coupon code"><button type="button" class="btn btn-ghost" id="applyCoupon">Apply</button></div><p class="field-hint" id="couponStatus" role="status" aria-live="polite"></p>
+<div class="label-with-info"><label for="payerUpi">Your UPI ID</label><button type="button" class="info-button" id="upiInfo" aria-label="Why we ask for your UPI ID">i</button></div>
+<input id="payerUpi" name="payerUpi" required maxlength="100" placeholder="example@oksbi"><p class="field-hint">Enter the UPI ID you will pay from. It helps us match your payment.</p>
+<label for="utr">UPI transaction reference / UTR</label><input id="utr" name="utr" required minlength="8" maxlength="30" placeholder="Enter reference after paying"><p class="field-hint">Find this in your UPI app's payment details.</p>
+<p class="form-status" id="formStatus" role="status" aria-live="polite"></p><button type="submit" class="btn btn-primary btn-lg submit-payment" id="submitPayment">I have paid — submit for verification</button>
+</form></section>
+<aside class="payment-card pay-instructions"><h2>Pay using UPI</h2><div class="amount-box"><span>Amount to pay</span><strong id="amount">—</strong><small id="planLabel">Select a plan</small><p id="discountLine" class="field-hint"></p></div>
+<p class="upi-label">DETwal UPI ID</p><div class="upi-copy-row"><strong id="merchantUpi">dakshdetwal@fam</strong><button type="button" class="btn btn-ghost copy-button" id="copyUpi">Copy</button></div>
+<ol class="steps"><li>Copy the UPI ID or open your UPI app.</li><li>Pay the exact amount shown above to <strong>dakshdetwal@fam</strong>.</li><li>Enter your payer UPI ID and UTR in the form.</li><li>Submit. Your request will show as <strong>Pending verification</strong>.</li></ol><p class="security-note">Never share your UPI PIN or OTP. DETwal will never ask for them.</p></aside></div>
+<p class="bottom-note">Payments are not automatically verified by this page. Your request is submitted for manual review. Access is activated only after payment is confirmed.</p></main>
 <div class="modal-backdrop" id="infoModal" hidden><section class="info-modal" role="dialog" aria-modal="true" aria-labelledby="infoTitle"><button class="modal-close" id="closeInfo" aria-label="Close">×</button><h2 id="infoTitle">Why do we ask for your UPI ID?</h2><p>Please enter the UPI ID <strong>you are paying from</strong> (your payer VPA), not DETwal's UPI ID. It helps us identify and match the incoming payment with your order. Your UPI ID alone does not prove payment; we also review the UTR and payment record.</p><button class="btn btn-primary" id="understood">Understood</button></section></div>
-<footer class="site-footer"><div class="container footer-bottom-inner"><p>© <span id="year">2026</span> DETwal. All rights reserved.</p><p class="footer-disclaimer">Trading involves risk. TopG Algo does not guarantee profits.</p></div></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/supabase-client.js"></script><script src="js/payment.js" defer></script>
-<script src="js/account-ui.js" defer></script>
+<footer class="site-footer"><div class="container footer-bottom-inner"><p>© <span id="year">2026</span> DETwal. All rights reserved.</p><p class="footer-disclaimer">Trading involves risk. Trading algorithms do not guarantee profits.</p></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/supabase-client.js"></script><script src="js/payment.js" defer></script><script src="js/account-ui.js" defer></script>
 </body></html>
