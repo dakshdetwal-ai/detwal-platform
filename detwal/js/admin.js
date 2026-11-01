@@ -1,306 +1,40 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const $ = id => document.getElementById(id);
-  const client = window.detwalSupabase;
-  if (!client) { location.replace('login.html'); return; }
-  let adminSession = null;
-  const initialize = async () => {
-    const { data, error } = await client.auth.getSession();
-    if (error || !data.session || (data.session.user.email || '').toLowerCase() !== 'dakshdetwal10@gmail.com') {
-      await client.auth.signOut();
-      location.replace('login.html');
-      return false;
-    }
-    adminSession = data.session;
-    return true;
-  };
-
-  const notice = message => { $('notice').textContent = message; };
-  const esc = value => String(value ?? '—').replace(/[&<>"']/g, char => ({
-    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
-  })[char]);
-
-  async function api(path, options = {}) {
-    const { data } = await client.auth.getSession();
-    const session = data.session;
-    if (!session || (session.user.email || '').toLowerCase() !== 'dakshdetwal10@gmail.com') {
-      location.replace('login.html');
-      throw new Error('Admin session expired. Please log in again.');
-    }
-    const route = path.startsWith('/admin') ? path.slice(6) : path;
-    const response = await fetch('https://evsnwenvmwhrohyzrjgq.supabase.co/functions/v1/admin-api' + route, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': 'sb_publishable_Vfy2VLbqRYB_DOsK13iuqA_9-pk4Q5t',
-        'Authorization': 'Bearer ' + session.access_token,
-        ...(options.headers || {})
-      }
-    });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok || result.success === false) throw new Error(result.message || 'Admin request failed.');
-    return result;
-  }
-
-  function renderTable(id, rows, columns) {
-    const target = $(id);
-    if (!Array.isArray(rows) || rows.length === 0) {
-      target.innerHTML = '<div class="empty-note">No records found.</div>';
-      return;
-    }
-    target.innerHTML = '<table><thead><tr>' +
-      columns.map(column => '<th>' + column[0] + '</th>').join('') +
-      '</tr></thead><tbody>' +
-      rows.map(row => '<tr>' + columns.map(column => '<td>' + column[1](row) + '</td>').join('') + '</tr>').join('') +
-      '</tbody></table>';
-  }
-
-  const action = (label, type, table, id) =>
-    '<button data-act="' + type + '" data-table="' + esc(table) + '" data-id="' + esc(id) + '">' + label + '</button>';
-
-  let users = [];
-
-  async function loadPayments() {
-    const result = await api('/admin/payments');
-    const rows = Array.isArray(result.payments) ? result.payments : [];
-
-    renderTable('paymentsTable', rows, [
-      ['Customer / Email', row => esc(row.customer_name || row.user_email || row.email)],
-      ['Plan', row => esc(row.plan_id || row.plan)],
-      ['Amount', row => row.amount_inr == null ? '—' : '₹' + esc(row.amount_inr)],
-      ['Mobile', row => esc(row.mobile_number)],
-      ['UPI ID', row => esc(row.payer_upi_id)],
-      ['UTR / Reference', row => esc(row.utr_reference || row.reference)],
-      ['Submitted', row => esc(row.created_at)],
-      ['Status', row => esc(row.status)],
-      ['Update', row => {
-        if (row.id == null || !row.status || row.status !== 'pending') return '—';
-        return action('Approve', 'payment-approved', '', row.id) +
-          action('Reject', 'payment-rejected', '', row.id);
-      }]
-    ]);
-
-    notice('Showing payment submissions retrieved directly from Supabase.');
-  }
-
-  async function loadCustomers() {
-    const result = await api('/admin/users');
-    users = Array.isArray(result.users) ? result.users : [];
-    renderUsers(users);
-  }
-
-  function renderUsers(rows) {
-    renderTable('customersTable', rows, [
-      ['Name', row => esc(row.name || row.full_name || row.customer_name)],
-      ['Email', row => esc(row.email || row.user_email)],
-      ['Phone', row => esc(row.phone || row.mobile_number)],
-      ['Joined', row => esc(row.created_at)],
-      ['Subscription', row => esc(row.plan || row.subscription || row.plan_id || 'None')],
-      ['Status', row => esc(row.status || row.account_status)],
-      ['Actions', row => {
-        const email = row.email || row.user_email;
-        return '—';
-      }]
-    ]);
-  }
-
-  async function loadTickets() {
-    const result = await api('/admin/tickets');
-    const tickets = Array.isArray(result.tickets) ? result.tickets : [];
-    const messages = Array.isArray(result.messages) ? result.messages : [];
-    const host = $('ticketsList');
-    host.replaceChildren();
-
-    if (!tickets.length) {
-      host.innerHTML = '<div class="empty-note">No support tickets found.</div>';
-      return;
-    }
-
-    tickets.forEach(ticket => {
-      const card = document.createElement('article');
-      card.className = 'ticket';
-      const title = document.createElement('h3');
-      title.textContent = '#' + ticket.id + ' · ' + (ticket.subject || 'Support request') + ' · ' + (ticket.status || 'open');
-      const meta = document.createElement('p');
-      meta.className = 'muted';
-      meta.textContent = (ticket.user_email || 'Unknown customer') + ' · ' + (ticket.created_at || '');
-      const message = document.createElement('p');
-      message.textContent = ticket.message || '';
-      card.append(title, meta, message);
-
-      const thread = messages.filter(item => String(item.ticket_id) === String(ticket.id));
-      thread.forEach(item => {
-        const reply = document.createElement('p');
-        reply.textContent = (item.sender || 'reply') + ': ' + (item.message || '');
-        card.append(reply);
-      });
-
-      const input = document.createElement('textarea');
-      input.placeholder = 'Write a reply…';
-      const send = document.createElement('button');
-      send.className = 'primary';
-      send.textContent = 'Send reply';
-      send.addEventListener('click', async () => {
-        const text = input.value.trim();
-        if (!text) { notice('Write a reply first.'); return; }
-        send.disabled = true;
-        try {
-          await api('/admin/tickets/reply', {
-            method: 'POST',
-            body: JSON.stringify({ ticketId: ticket.id, message: text })
-          });
-          input.value = '';
-          notice('Reply saved successfully.');
-          await loadTickets();
-        } catch (error) {
-          notice(error.message);
-        } finally {
-          send.disabled = false;
-        }
-      });
-      card.append(input, send);
-      host.append(card);
-    });
-  }
-
-  async function load(tab) {
-    try {
-      if (tab === 'payments') await loadPayments();
-      if (tab === 'customers') await loadCustomers();
-      if (tab === 'tickets') { $('ticketsList').innerHTML = '<div class="empty-note">For support, contact DETwal on WhatsApp at +91 63750 64184.</div>'; notice('Support is currently handled through WhatsApp.'); }
-      if (tab === 'plans') {
-        $('plansTable').innerHTML = '<div class="empty-note">Plans API is not implemented in the Worker yet.</div>';
-        notice('Subscription plan management needs backend routes and a confirmed plans table.');
-      }
-      if (tab === 'coupons') {
-        $('couponsTable').innerHTML = '<div class="empty-note">Coupons API is not implemented in the Worker yet.</div>';
-        notice('Coupon management needs backend routes and a confirmed coupon schema.');
-      }
-      if (tab === 'activity') {
-        $('activityTable').innerHTML = '<div class="empty-note">No bot activity endpoint is configured yet.</div>';
-        notice('Bot activity is read-only and will appear once its data source is connected.');
-      }
-    } catch (error) {
-      notice(error.message);
-    }
-  }
-
-  async function overview() {
-    try {
-      const result = await api('/admin/overview');
-      const counts = result.counts || {};
-      $('usersCount').textContent = counts.users ?? '—';
-      $('paidCount').textContent = counts.approved ?? counts.subscription_orders ?? '—';
-      $('pendingCount').textContent = counts.pending ?? '—';
-      $('ticketsCount').textContent = counts.support_tickets ?? '—';
-      $('botsCount').textContent = '—';
-      $('adminApp').classList.remove('hidden');
-      notice('Admin authenticated · dashboard counts loaded from connected data sources.');
-    } catch (error) {
-      notice(error.message);
-    }
-  }
-
-  document.querySelectorAll('[data-tab]').forEach(button => {
-    button.addEventListener('click', () => {
-      document.querySelectorAll('[data-tab]').forEach(item => item.classList.toggle('active', item === button));
-      ['payments','customers','tickets','plans','coupons','activity'].forEach(id =>
-        $(id).classList.toggle('hidden', id !== button.dataset.tab)
-      );
-      load(button.dataset.tab);
-    });
-  });
-
-  document.body.addEventListener('click', async event => {
-    const button = event.target.closest('[data-act]');
-    if (!button) return;
-    const type = button.dataset.act;
-    const id = button.dataset.id;
-    const tableName = button.dataset.table;
-
-    try {
-      if (type === 'payment-approved' || type === 'payment-rejected') {
-        const nextStatus = type === 'payment-approved' ? 'approved' : 'rejected';
-        const confirmed = confirm(
-          (nextStatus === 'approved' ? 'Approve' : 'Reject') +
-          ' this payment submission? Verify the UTR and received amount first.'
-        );
-        if (!confirmed) return;
-
-        button.disabled = true;
-        await api('/admin/payments/status', {
-          method: 'PATCH',
-          body: JSON.stringify({ id, status: nextStatus })
-        });
-        notice('Payment status updated to ' + nextStatus + '.');
-        await loadPayments();
-        await overview();
-      }
-
-      if (type === 'restrict') {
-        const hours = Number(prompt('Restrict this user for how many hours? (1–8760)'));
-        if (!Number.isFinite(hours) || hours < 1 || hours > 8760) return;
-        await api('/admin/users/restrict', {
-          method: 'POST',
-          body: JSON.stringify({ email: id, hours, reason: 'Admin restriction' })
-        });
-        notice('User restriction saved.');
-        await loadCustomers();
-      }
-
-      if (type === 'unrestrict') {
-        await api('/admin/users/unrestrict', {
-          method: 'POST',
-          body: JSON.stringify({ email: id })
-        });
-        notice('User restriction removed.');
-        await loadCustomers();
-      }
-    } catch (error) {
-      notice(error.message);
-    }
-  });
-
-  $('userSearch').addEventListener('input', () => {
-    const query = $('userSearch').value.toLowerCase();
-    renderUsers(users.filter(user =>
-      [user.name,user.full_name,user.email,user.user_email,user.phone,user.mobile_number]
-        .some(value => String(value || '').toLowerCase().includes(query))
-    ));
-  });
-
-  // Do not leave controls that look active when their backend routes do not exist yet.
-  ['newPlan','savePlan','newCoupon','saveCoupon'].forEach(id => {
-    const control = $(id);
-    if (control) {
-      control.disabled = true;
-      control.title = 'This feature needs its backend routes before it can be used.';
-    }
-  });
-
-  $('globalSearch').addEventListener('input', () => {
-    const query = $('globalSearch').value.trim().toLowerCase();
-    const active = document.querySelector('[data-tab].active')?.dataset.tab;
-    if (active === 'customers') {
-      renderUsers(users.filter(user =>
-        [user.name,user.full_name,user.email,user.user_email,user.phone,user.mobile_number]
-          .some(value => String(value || '').toLowerCase().includes(query))
-      ));
-    } else if (active === 'tickets') {
-      $('ticketsList').querySelectorAll('.ticket').forEach(card => {
-        card.hidden = query && !card.textContent.toLowerCase().includes(query);
-      });
-    } else if (active === 'payments') {
-      $('paymentsTable').querySelectorAll('tbody tr').forEach(row => {
-        row.hidden = query && !row.textContent.toLowerCase().includes(query);
-      });
-    }
-  });
-
-  $('refresh').addEventListener('click', async () => {
-    await overview();
-    const active = document.querySelector('[data-tab].active')?.dataset.tab || 'payments';
-    await load(active);
-  });
-
-  initialize().then(ok => { if (ok) { overview(); document.querySelector('[data-tab="payments"]').click(); } });
+document.addEventListener('DOMContentLoaded',()=>{
+ const $=id=>document.getElementById(id), client=window.detwalSupabase;
+ const ADMIN='dakshdetwal10@gmail.com', BASE='https://evsnwenvmwhrohyzrjgq.supabase.co/functions/v1/admin-api';
+ let users=[];
+ const esc=v=>String(v??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const note=m=>{$('notice').textContent=m;};
+ async function api(path,options={}){
+  const {data,error}=await client.auth.getSession(); if(error||!data.session||(data.session.user.email||'').toLowerCase()!==ADMIN) throw Error('Admin session expired. Please sign in again.');
+  const res=await fetch(BASE+path,{...options,headers:{'Content-Type':'application/json','apikey':'sb_publishable_Vfy2VLbqRYB_DOsK13iuqA_9-pk4Q5t','Authorization':'Bearer '+data.session.access_token,...(options.headers||{})}});
+  const body=await res.json().catch(()=>({}));if(!res.ok||body.success===false)throw Error(body.message||'Request failed');return body;
+ }
+ function table(id,rows,cols){const el=$(id);if(!rows?.length){el.innerHTML='<div class="empty-note">No records found.</div>';return;}el.innerHTML='<table><thead><tr>'+cols.map(c=>'<th>'+c[0]+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+cols.map(c=>'<td>'+c[1](r)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';}
+ const btn=(label,act,id)=>'<button class="action-btn" data-act="'+act+'" data-id="'+esc(id)+'">'+label+'</button>';
+ async function overview(){const x=await api('/overview'),c=x.counts||{};$('usersCount').textContent=c.users??'—';$('paidCount').textContent=c.active_subscriptions??0;$('pendingCount').textContent=c.pending??0;$('ticketsCount').textContent=c.support_tickets??0;$('botsCount').textContent='—';$('adminApp').classList.remove('hidden');}
+ async function payments(){const x=await api('/payments');table('paymentsTable',x.payments,[['Customer',r=>esc(r.customer_name)],['Email',r=>esc(r.user_email)],['Plan',r=>esc(r.plan_id)],['Amount',r=>'₹'+esc(r.amount_inr)],['UTR',r=>esc(r.utr_reference)],['Date',r=>esc(new Date(r.created_at).toLocaleString())],['Status',r=>esc(r.status)],['Review',r=>r.status==='pending'?btn('Approve','approve',r.id)+btn('Reject','reject',r.id):'—']]);}
+ async function customers(){const x=await api('/users');users=x.users||[];renderUsers(users);}
+ function renderUsers(rows){table('customersTable',rows,[['Name',r=>esc(r.name)],['Email',r=>esc(r.email)],['Phone',r=>esc(r.phone)],['Plan',r=>esc(r.plan)],['Access',r=>esc(r.subscription_status)],['Expires',r=>r.expires_at?esc(new Date(r.expires_at).toLocaleDateString()):'—'],['Account',r=>esc(r.status)],['Actions',r=>r.status==='restricted'?btn('Unrestrict','unrestrict',r.id):btn('Restrict','restrict',r.id)]]);}
+ async function tickets(){const x=await api('/tickets'),host=$('ticketsList');host.replaceChildren();if(!x.tickets?.length){host.innerHTML='<div class="empty-note">No support tickets yet.</div>';return;}for(const t of x.tickets){const card=document.createElement('article');card.className='ticket';const h=document.createElement('h3');h.textContent=t.subject+' · '+t.status;const meta=document.createElement('p');meta.textContent=t.user_email+' · '+new Date(t.created_at).toLocaleString();card.append(h,meta);(x.messages||[]).filter(m=>m.ticket_id===t.id).forEach(m=>{const p=document.createElement('p');p.textContent=(m.sender||'User')+': '+m.message;card.append(p);});const input=document.createElement('textarea');input.placeholder='Reply to customer';const send=document.createElement('button');send.className='primary';send.textContent='Send reply';send.onclick=async()=>{try{await api('/tickets/reply',{method:'POST',body:JSON.stringify({ticket_id:t.id,message:input.value})});note('Reply sent.');await tickets();}catch(e){note(e.message);}};const status=document.createElement('select');['open','in_progress','closed'].forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;o.selected=s===t.status;status.append(o);});status.onchange=async()=>{try{await api('/tickets/'+t.id,{method:'PATCH',body:JSON.stringify({status:status.value})});note('Ticket status updated.');await overview();}catch(e){note(e.message);}};card.append(input,send,status);host.append(card);}}
+ async function plans(){const x=await api('/plans');table('plansTable',x.plans,[['ID',r=>esc(r.id)],['Name',r=>esc(r.name)],['Price',r=>'₹'+esc(r.amount_inr)],['Duration',r=>esc(r.duration_days)+' days'],['Terminals',r=>esc(r.terminals_limit)],['Active',r=>r.is_active?'Yes':'No']]);}
+ async function coupons(){const x=await api('/coupons');table('couponsTable',x.coupons,[['Code',r=>esc(r.code)],['Discount',r=>esc(r.discount_value)+(r.discount_type==='percent'?'%':' INR')],['Uses',r=>esc(r.redemption_count)+' / '+esc(r.max_redemptions??'∞')],['Expiry',r=>r.expires_at?esc(new Date(r.expires_at).toLocaleDateString()):'No expiry'],['Status',r=>r.is_active?'Active':'Inactive'],['Action',r=>btn(r.is_active?'Disable':'Enable','coupon-toggle:'+(!r.is_active),r.id)]]);}
+ const loaders={payments,customers,tickets,plans,coupons,activity:async()=>{$('activityTable').innerHTML='<div class="empty-note">Bot activity is intentionally not connected.</div>';note('Bot activity excluded from this backend update.');}};
+ async function load(tab){try{await loaders[tab]?.();}catch(e){note(e.message);}}
+ document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['payments','customers','tickets','plans','coupons','activity'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab));load(b.dataset.tab);}));
+ document.body.addEventListener('click',async e=>{const b=e.target.closest('[data-act]');if(!b)return;const act=b.dataset.act,id=b.dataset.id;b.disabled=true;try{
+  if(act==='approve'||act==='reject'){if(!confirm('Confirm '+act+'? Verify the actual received payment first.'))return;await api('/payments/status',{method:'PATCH',body:JSON.stringify({id,status:act==='approve'?'approved':'rejected'})});await payments();await overview();note('Payment review saved atomically.');}
+  if(act==='restrict'){const hours=Number(prompt('Restriction duration in hours (1–8760):'));if(!Number.isInteger(hours)||hours<1||hours>8760)return;await api('/users/restrict',{method:'POST',body:JSON.stringify({user_id:id,hours})});await customers();note('Customer restricted.');}
+  if(act==='unrestrict'){await api('/users/unrestrict',{method:'POST',body:JSON.stringify({user_id:id})});await customers();note('Customer restriction removed.');}
+  if(act.startsWith('coupon-toggle:')){await api('/coupons/'+id,{method:'PATCH',body:JSON.stringify({is_active:act.endsWith('true')})});await coupons();note('Coupon status updated.');}
+ }catch(err){note(err.message);}finally{b.disabled=false;}});
+ $('userSearch').addEventListener('input',()=>{const q=$('userSearch').value.toLowerCase();renderUsers(users.filter(u=>[u.name,u.email,u.phone,u.plan].some(v=>String(v||'').toLowerCase().includes(q))));});
+ $('globalSearch').addEventListener('input',()=>{const q=$('globalSearch').value.toLowerCase(),tab=document.querySelector('[data-tab].active')?.dataset.tab;if(tab==='customers')renderUsers(users.filter(u=>[u.name,u.email,u.phone,u.plan].some(v=>String(v||'').toLowerCase().includes(q))));else document.querySelectorAll('#'+tab+' tbody tr').forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(q));});
+ $('refresh').onclick=async()=>{try{await overview();const tab=document.querySelector('[data-tab].active')?.dataset.tab||'payments';await load(tab);note('Dashboard refreshed.');}catch(e){note(e.message);}};
+ $('newPlan').onclick=()=>{$('planForm').classList.remove('hidden');};
+ $('cancelPlan').onclick=()=>{$('planForm').classList.add('hidden');};
+ $('savePlan').onclick=async()=>{try{await api('/plans',{method:'POST',body:JSON.stringify({id:$('pid').value.trim().toLowerCase(),name:$('pname').value,amount_inr:Number($('pprice').value),duration_days:Number($('pperiod').value)||30,terminals_limit:Number($('pterminals').value),is_active:true})});$('planForm').classList.add('hidden');await plans();note('Plan saved.');}catch(e){note(e.message);}};
+ $('newCoupon').onclick=()=>{$('couponForm').classList.remove('hidden');};
+ $('cancelCoupon').onclick=()=>{$('couponForm').classList.add('hidden');};
+ $('saveCoupon').onclick=async()=>{try{await api('/coupons',{method:'POST',body:JSON.stringify({code:$('ccode').value,discount_type:$('ctype').value,discount_value:Number($('cvalue').value),max_redemptions:$('climit').value?Number($('climit').value):null,expires_at:$('cexpiry').value?new Date($('cexpiry').value+'T23:59:59').toISOString():null})});$('couponForm').classList.add('hidden');await coupons();note('Coupon saved.');}catch(e){note(e.message);}};
+ (async()=>{try{if(!client)throw Error('Supabase client unavailable.');const {data,error}=await client.auth.getSession();if(error||!data.session||(data.session.user.email||'').toLowerCase()!==ADMIN){await client.auth.signOut();location.replace('login.html');return;}await overview();await payments();note('Admin authenticated · Supabase backend connected.');}catch(e){note(e.message);}})();
 });
