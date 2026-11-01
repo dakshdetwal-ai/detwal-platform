@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const API = 'https://detwal-api.dakshdetwal10.workers.dev';
-  const ADMIN_EMAIL = 'support@admin.com';
   const form = document.getElementById('loginForm');
   const status = document.getElementById('formStatus');
   const button = document.getElementById('loginSubmit');
@@ -69,32 +67,16 @@ document.addEventListener('DOMContentLoaded', () => {
     setStatus('Signing you in…');
 
     try {
-      if (email === ADMIN_EMAIL) {
-        const response = await fetch(API + '/admin/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok || !result.success || !result.token) {
-          throw new Error(result.message || 'Admin login failed. Please check your credentials.');
-        }
-
-        sessionStorage.setItem('detwal_admin_token', result.token);
-        sessionStorage.setItem('detwal_admin_email', email);
+      const client = window.detwalSupabase;
+      if (!client) throw new Error('Login service did not load. Refresh and try again.');
+      const { data, error } = await client.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      const signedInEmail = (data.user?.email || '').toLowerCase();
+      if (signedInEmail === 'dakshdetwal10@gmail.com') {
         setStatus('Admin login successful. Opening dashboard…', 'success');
         window.location.assign('admin.html');
         return;
       }
-
-      const client = window.detwalSupabase;
-      if (!client) {
-        throw new Error('Login service did not load. Refresh the page and try again.');
-      }
-
-      const { error } = await client.auth.signInWithPassword({ email, password });
-      if (error) throw error;
 
       setStatus('Login successful. Opening your account…', 'success');
       window.location.assign('store.html');
