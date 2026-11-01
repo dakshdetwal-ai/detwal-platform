@@ -1,0 +1,37 @@
+.testing-page{min-height:100vh;background:#f0ebf8;color:#202124;font-family:Inter,Arial,sans-serif}
+.testing-page .site-header{background:#100d19;border-bottom:1px solid rgba(255,255,255,.1)}
+.testing-wrap{width:min(720px,calc(100% - 32px));margin:48px auto 70px}
+.testing-intro{padding:32px 8px 24px;color:#24212b}
+.testing-eyebrow{display:inline-block;color:#7040c8;font-size:.76rem;font-weight:800;letter-spacing:.12em;margin-bottom:14px}
+.testing-intro h1{font-size:clamp(2.1rem,6vw,3.2rem);line-height:1.1;letter-spacing:-.05em;margin:0 0 16px;font-weight:800}
+.testing-intro h1 span{color:#7544ce}
+.testing-intro>p{font-size:1rem;line-height:1.7;color:#5d5865;max-width:640px}
+.testing-note{margin-top:20px;padding:15px 18px;border-left:4px solid #8054d6;background:#e7def5;border-radius:6px;color:#494153;font-size:.9rem;line-height:1.6}
+.google-form{position:relative;background:#fff;border:1px solid #dadce0;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(60,40,90,.08)}
+.form-banner{height:10px;background:linear-gradient(90deg,#6f3cc3,#a77af0)}
+.form-heading{padding:28px 28px 20px;border-bottom:1px solid #eee}
+.form-heading h2{font-size:1.45rem;line-height:1.3;margin:0 0 10px;color:#202124}
+.form-heading p{color:#5f6368;font-size:.9rem;line-height:1.6;margin:0 0 10px}
+.form-heading .required-note{font-size:.8rem;margin-top:18px}
+.required-note span,.question-card label>span,.question-card legend>span{color:#d93025}
+.question-card{margin:14px 0;padding:24px 28px;background:#fff;border:1px solid #dadce0;border-radius:9px}
+.question-card>label,.question-card legend{display:block;font-weight:600;font-size:1rem;margin-bottom:20px;color:#202124}
+.question-card input[type=text],.question-card input[type=tel]{width:100%;max-width:440px;border:0;border-bottom:1px solid #dadce0;padding:11px 2px;font:inherit;font-size:.95rem;outline:none;border-radius:0;background:transparent;color:#202124}
+.question-card input:focus{border-bottom:2px solid #7544ce}
+.question-card small{display:block;color:#70757a;margin-top:12px;font-size:.8rem}
+.question-card fieldset,.question-card legend{min-width:0}
+fieldset.question-card{border:1px solid #dadce0}
+fieldset.question-card legend{padding:0 4px;margin:0 0 14px}
+.choice{display:flex!important;align-items:center;gap:13px;padding:9px 0;margin:0!important;font-size:.94rem!important;font-weight:400!important;cursor:pointer}
+.choice input{width:18px;height:18px;accent-color:#7544ce;flex-shrink:0}
+.form-actions{display:flex;align-items:center;justify-content:space-between;padding:20px 4px 12px}
+.form-actions .btn{border:0}
+.clear-form{color:#7544ce;font-weight:600;padding:12px}
+.form-footnote{font-size:.78rem;color:#6d6875;line-height:1.6;padding:4px 4px 12px}
+.form-message{display:none;margin:8px 0 0;padding:15px 18px;border-radius:8px;font-size:.9rem;line-height:1.5}
+.form-message.success{display:block;background:#e6f4ea;color:#137333}
+.form-message.error{display:block;background:#fce8e6;color:#b3261e}
+.trap-field{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+.testing-footer{text-align:center;color:#77717f;font-size:.8rem;margin-top:25px}
+.testing-footer a{color:#7544ce;font-weight:700}
+@media(max-width:600px){.testing-wrap{margin:22px auto 45px}.testing-intro{padding:25px 3px 18px}.form-heading,.question-card{padding:22px 19px}.form-actions{padding:16px 2px}.form-actions .btn{padding:12px 18px}}
