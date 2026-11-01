@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ['Status', row => esc(row.status || row.account_status)],
       ['Actions', row => {
         const email = row.email || row.user_email;
-        return email ? action('Restrict','restrict', '', email) + action('Unrestrict','unrestrict','',email) : '—';
+        return '—';
       }]
     ]);
   }
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       if (tab === 'payments') await loadPayments();
       if (tab === 'customers') await loadCustomers();
-      if (tab === 'tickets') await loadTickets();
+      if (tab === 'tickets') { $('ticketsList').innerHTML = '<div class="empty-note">For support, contact DETwal on WhatsApp at +91 63750 64184.</div>'; notice('Support is currently handled through WhatsApp.'); }
       if (tab === 'plans') {
         $('plansTable').innerHTML = '<div class="empty-note">Plans API is not implemented in the Worker yet.</div>';
         notice('Subscription plan management needs backend routes and a confirmed plans table.');
