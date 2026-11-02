@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
   const rows=rq.data||[],subs=sq.data||[],now=Date.now(),active=subs.find(s=>s.status==='active'&&new Date(s.expires_at).getTime()>now);
   $('requestCount').textContent=rows.length;$('approvedCount').textContent=rows.filter(r=>r.status==='approved').length;$('pendingCount').textContent=rows.filter(r=>r.status==='pending').length;
   if(active){const banner=document.createElement('div');banner.className='dashboard-empty';const days=Math.max(0,Math.ceil((new Date(active.expires_at).getTime()-now)/86400000));banner.innerHTML='<strong>Active subscription: '+String(active.plan_id).toUpperCase()+'</strong><p>Access expiry: '+new Date(active.expires_at).toLocaleString('en-IN')+' · '+days+' day(s) remaining · '+active.terminals_limit+' terminal(s)</p>';host.append(banner);}
-  if(!rows.length&&!active){host.innerHTML='<div class="dashboard-empty"><strong>No plan requests yet</strong><p>Your plan requests will appear here.</p><a class="btn btn-primary" href="store.html">Browse plans</a></div>';return;}
+  if(!rows.length&&!active){host.innerHTML='<div class="dashboard-empty"><strong>No plan requests yet</strong><p>Your plan requests will appear here.</p><a class="btn btn-primary" href="store.html">Browse plans</a></div>';}
 
   const [inv,notifs,code,rewards]=await Promise.all([
    client.from('invoices').select('invoice_number,plan_id,amount_inr,issued_at').eq('user_id',user.id).order('issued_at',{ascending:false}),
