@@ -14,11 +14,12 @@ document.addEventListener('DOMContentLoaded',async()=>{
   function render(list,target,kind){
    $(target).innerHTML=list.length?list.map((r,i)=>{
     const id='msg-'+kind+'-'+i,name=String(r.full_name||'Trader').trim(),msg=kind==='yes'?'Hey '+name+', you have been selected! Please visit detwal.in and create your account. We will activate your account by tomorrow’s London session.':'Hey '+name+', sorry to say, but you have not been selected among the 3 traders for TopG Algo free access. However, we’d love you to visit detwal.in and stay tuned for our next slot of 50 traders, coming this weekend.';
-    return '<article class="person"><strong>'+esc(name)+'</strong><div class="details">'+esc(r.strategy_experience)+' · Payout: '+(r.received_payout?'Yes':'No')+' · '+esc(r.strongest_level)+'</div><a class="open" href="#'+id+'">Open message ↗</a><section class="message" id="'+id+'"><div class="muted">Ready-to-send WhatsApp message</div><p id="text-'+id+'">'+esc(msg)+'</p><button class="copy" data-copy="'+id+'">Copy message</button></section></article>';
+    const phone=String(r.whatsapp_number||''),digits=phone.replace(/\\D/g,''),valid=digits.length>=10&&digits.length<=15;
+    const send=valid?'<a class="open" style="margin:0 6px 8px 0" href="https://wa.me/'+digits+'?text='+encodeURIComponent(msg)+'" target="_blank" rel="noopener noreferrer">Send on WhatsApp ↗</a>':'<span class="muted">No valid WhatsApp number recorded</span>';
+    return '<article class="person"><strong>'+esc(name)+'</strong><div class="details">'+esc(r.strategy_experience)+' · Payout: '+(r.received_payout?'Yes':'No')+' · '+esc(r.strongest_level)+'<br>WhatsApp: '+esc(phone||'Not provided')+'</div>'+send+'<a class="open" href="#'+id+'">Preview message</a><section class="message" id="'+id+'"><div class="muted">WhatsApp message preview</div><p>'+esc(msg)+'</p></section></article>';
    }).join(''):'<p class="muted">No traders in this group.</p>';
   }
   render(yes,'qualified','yes');render(no,'notQualified','no');
-  document.addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;const p=document.querySelector('#text-'+b.dataset.copy);try{await navigator.clipboard.writeText(p.textContent);b.textContent='Copied!';}catch{note('Copy unavailable. Select the paragraph and copy it manually.',true);}});
-  $('app').classList.remove('hidden');note('Loaded '+rows.length+' applications. Duplicate names are shown once.');
+  $('app').classList.remove('hidden');note('Loaded '+rows.length+' applications. Duplicate names are shown once. WhatsApp opens with a prefilled draft; press Send in WhatsApp to deliver it.');
  }catch(e){note(e.message,true);}
 });
