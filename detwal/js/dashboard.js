@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
   $('copyReferral').onclick=()=>navigator.clipboard?.writeText(code.data||'');
   $('copyReferralLink').onclick=()=>navigator.clipboard?.writeText(signupLink);
   const incoming=new URLSearchParams(location.search).get('ref')||meta.referral_code||'';
-  if(incoming){$('referralInput').value=incoming.toUpperCase();}
+  if(incoming){$('referralInput').value=incoming.toUpperCase();if(meta.referral_code){const {error:autoError}=await client.rpc('detwal_apply_referral',{p_code:incoming.toUpperCase()});$('referralStatus').textContent=autoError?autoError.message:'Your inviter’s referral code has been applied.';}}
   $('applyReferralForm').onsubmit=async e=>{e.preventDefault();const {data:applied,error}=await client.rpc('detwal_apply_referral',{p_code:$('referralInput').value.trim().toUpperCase()});$('referralStatus').textContent=error?error.message:'Referral code applied successfully.';};
   $('referralRewards').textContent=(rewards.data||[]).map(r=>'₹'+r.amount_inr+' · '+r.status).join(' | ')||'No referral rewards yet.';
   $('notificationList').replaceChildren();
