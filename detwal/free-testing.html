@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Apply for one of three free TopG Algo testing slots by DETwal.">
-  <title>Free TopG Algo Testing | DETwal</title>
+  <meta name="description" content="TopG Algo free testing applications are currently closed. More testing slots coming soon.">
+  <title>Applications Closed | DETwal TopG Algo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,74 +18,22 @@
       <a href="index.html" class="btn btn-ghost">Back to Home</a>
     </div>
   </header>
-
   <main class="testing-wrap">
     <section class="testing-intro">
-      <span class="testing-eyebrow">LIMITED TESTING · 3 TRADERS ONLY</span>
-      <h1>Get <span>TopG Algo</span> for free.</h1>
-      <p>We’re selecting only <strong>3 traders</strong> to test TopG Algo. Fill out this short application. If selected, we’ll connect TopG Algo to your funded account free of charge.</p>
-      <div class="testing-note"><strong>No payment required.</strong> Submitting this form does not guarantee selection. We’ll contact selected applicants on WhatsApp.</div>
+      <span class="testing-eyebrow">TOPG ALGO · FREE TESTING</span>
+      <h1>Applications are <span>closed.</span></h1>
+      <p>We’ve received <strong>14 applications</strong> for our free TopG Algo testing programme—more than the 3 testing slots currently available.</p>
     </section>
-
-    <form id="testingApplication" class="google-form" novalidate>
+    <section class="google-form" aria-labelledby="closed-title">
       <div class="form-banner"></div>
       <div class="form-heading">
-        <h2>TopG Algo — Free Testing Application</h2>
-        <p>Answer all questions honestly. Your details will only be used to review this application and contact you about testing.</p>
-        <p class="required-note"><span>*</span> Required</p>
+        <h2 id="closed-title">Thank you for the amazing response!</h2>
+        <p>We’ve now stopped accepting applications while we review the submissions and select 3 traders.</p>
+        <p><strong>But don’t worry—we’ll be back soon with more testing slots!</strong></p>
+        <p>Stay tuned to our official channels for the next opportunity.</p>
       </div>
-
-      <div class="question-card">
-        <label for="fullName">1. What is your name? <span>*</span></label>
-        <input id="fullName" name="full_name" type="text" maxlength="100" autocomplete="name" placeholder="Your full name" required>
-      </div>
-
-      <div class="question-card">
-        <label for="whatsapp">2. WhatsApp number (with country code) <span>*</span></label>
-        <input id="whatsapp" name="whatsapp_number" type="tel" maxlength="20" autocomplete="tel" placeholder="+91 98765 43210" required>
-        <small>We’ll use this number to contact you if you’re selected.</small>
-      </div>
-
-      <fieldset class="question-card">
-        <legend>3. How much experience do you have with the TopG Strategy? <span>*</span></legend>
-        <label class="choice"><input type="radio" name="strategy_experience" value="Less than 1 month" required><span>Less than 1 month</span></label>
-        <label class="choice"><input type="radio" name="strategy_experience" value="1–3 months"><span>1–3 months</span></label>
-        <label class="choice"><input type="radio" name="strategy_experience" value="3–6 months"><span>3–6 months</span></label>
-        <label class="choice"><input type="radio" name="strategy_experience" value="6–12 months"><span>6–12 months</span></label>
-        <label class="choice"><input type="radio" name="strategy_experience" value="More than 1 year"><span>More than 1 year</span></label>
-      </fieldset>
-
-      <fieldset class="question-card">
-        <legend>4. Have you received a payout using the TopG Strategy? <span>*</span></legend>
-        <label class="choice"><input type="radio" name="received_payout" value="yes" required><span>Yes</span></label>
-        <label class="choice"><input type="radio" name="received_payout" value="no"><span>No</span></label>
-      </fieldset>
-
-      <fieldset class="question-card">
-        <legend>5. Which is the most powerful TopG Strategy level in your experience? <span>*</span></legend>
-        <label class="choice"><input type="radio" name="strongest_level" value="TJL1" required><span>TJL1</span></label>
-        <label class="choice"><input type="radio" name="strongest_level" value="TJL2"><span>TJL2</span></label>
-        <label class="choice"><input type="radio" name="strongest_level" value="QML"><span>QML</span></label>
-        <label class="choice"><input type="radio" name="strongest_level" value="SBR"><span>SBR</span></label>
-      </fieldset>
-
-      <div class="trap-field" aria-hidden="true">
-        <label for="website">Leave this field empty</label>
-        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
-      </div>
-
-      <div class="form-actions">
-        <button class="btn btn-primary btn-lg" id="submitApplication" type="submit">Submit application</button>
-        <button class="clear-form" type="reset">Clear form</button>
-      </div>
-      <p class="form-footnote">Your application is private. Do not share your MT5 password, investor password, or account login details in this form.</p>
-      <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
-    </form>
-    <p class="testing-footer"><a href="index.html">DETwal</a> · TopG Algo free testing</p>
+    </section>
+    <p class="testing-footer"><a href="index.html">DETwal</a> · TopG Algo</p>
   </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-client.js"></script>
-  <script src="js/free-testing.js" defer></script>
 </body>
 </html>
