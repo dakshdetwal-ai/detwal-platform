@@ -9,7 +9,7 @@
 *{box-sizing:border-box}body{margin:0;background:#0b0913;color:#f7f4ff;font:14px Inter,Arial,sans-serif}.wrap{max-width:1050px;margin:40px auto;padding:0 18px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:28px}.brand{font-weight:800;font-size:21px}.brand span{color:#a879ff}.sub{color:#aaa2bb;font-size:13px;margin-top:7px}a{color:#c9a9ff}.back{border:1px solid #38304d;border-radius:9px;padding:10px 13px;text-decoration:none}.stats{display:flex;gap:12px;margin:20px 0;flex-wrap:wrap}.stat,.group,.message{background:#151222;border:1px solid #302943;border-radius:13px;padding:17px}.stat strong{font-size:25px;display:block}.stat small,.muted{color:#aaa2bb}.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}.group h2{font-size:16px;margin:0 0 7px}.person{border-top:1px solid #302943;padding:14px 0}.person:first-of-type{margin-top:10px}.person strong{display:block}.details{font-size:12px;color:#aaa2bb;margin:5px 0 10px}.open{display:inline-block;background:#7544ce;color:white;text-decoration:none;border-radius:7px;padding:8px 11px;font-size:12px;font-weight:600}.message{margin-top:18px;display:none;border-color:#7952b7}.message:target{display:block}.message p{line-height:1.7;white-space:pre-wrap;color:#e5dff0}.copy{border:0;background:#7544ce;color:white;border-radius:7px;padding:9px 12px;font-weight:600;cursor:pointer}.notice{color:#bfa6ef;min-height:20px;font-size:12px;margin:14px 0}.error{color:#ff9c9c}.hidden{display:none!important}@media(max-width:700px){.cols{grid-template-columns:1fr}.wrap{margin:24px auto}}
 </style></head>
 <body><main class="wrap">
-<header class="top"><div><div class="brand">DET<span>wal</span> · Trader Selection</div><div class="sub">Private admin workspace · phone numbers visible only to admin</div></div><a class="back" href="admin.html">← Admin console</a></header>
+<header class="top"><div><div class="brand">DET<span>wal</span> · Trader Selection</div><div class="sub">Private admin workspace · phone numbers and WhatsApp actions are admin-only</div></div><a class="back" href="admin.html">← Admin console</a></header>
 <div id="notice" class="notice">Checking admin session…</div>
 <div id="app" class="hidden">
 <div class="stats"><div class="stat"><strong id="total">—</strong><small>Total applications</small></div><div class="stat"><strong id="qualifiedCount">—</strong><small>Qualified unique traders</small></div><div class="stat"><strong id="otherCount">—</strong><small>Not qualified</small></div></div>
@@ -17,5 +17,5 @@
 <div id="messages"></div>
 </div></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase-client.js"></script><script src="js/selection.js" defer></script>
+<script src="js/supabase-client.js"></script><script src="js/selection.js?v=20261102-2" defer></script>
 </body></html>
