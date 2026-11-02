@@ -66,7 +66,7 @@ function initSignupValidation() {
         email: fields.email.value.trim(),
         password: fields.password.value,
         options: {
-          data: { full_name: fields.fullName.value.trim() },
+          data: { full_name: fields.fullName.value.trim(), referral_code: (document.getElementById('referralCode')?.value || new URLSearchParams(location.search).get('ref') || '').trim().toUpperCase() },
           emailRedirectTo: 'https://detwal.in/detwal/login.html'
         }
       });
