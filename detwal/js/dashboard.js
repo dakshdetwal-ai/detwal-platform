@@ -26,11 +26,13 @@ document.addEventListener('DOMContentLoaded',async()=>{
   $('invoiceList').replaceChildren();
   (inv.data||[]).forEach(v=>{const c=document.createElement('article');c.className='plan-request';const title=document.createElement('strong');title.textContent=v.invoice_number+' · '+String(v.plan_id).toUpperCase();const meta=document.createElement('p');meta.textContent='₹'+Number(v.amount_inr).toLocaleString('en-IN')+' · '+new Date(v.issued_at).toLocaleDateString('en-IN');const print=document.createElement('button');print.className='btn btn-ghost';print.textContent='Print receipt';print.onclick=()=>{const w=window.open('','_blank','width=600,height=700');if(!w)return;w.document.write('<h1>DETwal payment receipt</h1><p>Invoice: '+v.invoice_number+'</p><p>Plan: '+v.plan_id+'</p><p>Amount: ₹'+v.amount_inr+'</p><p>Issued: '+new Date(v.issued_at).toLocaleString()+'</p>');w.document.close();w.print();};c.append(title,meta,print);$('invoiceList').append(c);});
   if(!(inv.data||[]).length)$('invoiceList').textContent='No receipts yet.';
-  $('referralCode').textContent=code.data||'Unavailable';
-  const signupLink=code.data?new URL('signup.html?ref='+encodeURIComponent(code.data),location.href).href:'';
-  $('referralLink').value=signupLink;
-  $('copyReferral').onclick=()=>navigator.clipboard?.writeText(code.data||'');
-  $('copyReferralLink').onclick=()=>navigator.clipboard?.writeText(signupLink);
+  let activeReferralCode=code.data||'';
+  const showReferralCode=value=>{activeReferralCode=value||'';$('referralCode').textContent=activeReferralCode||'Not created yet';$('copyReferral').disabled=!activeReferralCode;const link=activeReferralCode?new URL('signup.html?ref='+encodeURIComponent(activeReferralCode),location.href).href:'';$('referralLink').value=link;};
+  showReferralCode(activeReferralCode);
+  $('generateReferral').textContent=activeReferralCode?'Get my referral code':'Generate my referral code';
+  $('generateReferral').onclick=async()=>{const btn=$('generateReferral');btn.disabled=true;btn.textContent='Creating…';try{const {data,error}=await client.rpc('detwal_create_referral_code');if(error)throw error;showReferralCode(data);btn.textContent='My referral code is ready';}catch(e){$('referralStatus').textContent=e.message||'Could not create referral code.';btn.textContent='Try again';}finally{btn.disabled=false;}};
+  $('copyReferral').onclick=()=>activeReferralCode&&navigator.clipboard?.writeText(activeReferralCode);
+  $('copyReferralLink').onclick=()=>navigator.clipboard?.writeText($('referralLink').value);
   const incoming=new URLSearchParams(location.search).get('ref')||meta.referral_code||'';
   if(incoming){$('referralInput').value=incoming.toUpperCase();if(meta.referral_code){const {error:autoError}=await client.rpc('detwal_apply_referral',{p_code:incoming.toUpperCase()});$('referralStatus').textContent=autoError?autoError.message:'Your inviter’s referral code has been applied.';}}
   $('applyReferralForm').onsubmit=async e=>{e.preventDefault();const {data:applied,error}=await client.rpc('detwal_apply_referral',{p_code:$('referralInput').value.trim().toUpperCase()});$('referralStatus').textContent=error?error.message:'Referral code applied successfully.';};
