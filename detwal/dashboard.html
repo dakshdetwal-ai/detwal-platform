@@ -5,7 +5,7 @@
 <title>User Dashboard — DETwal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/account.css"><link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/account.css"><link rel="stylesheet" href="css/dashboard.css?v=20261103-botactivation">
 </head>
 <body>
 <header class="site-header"><div class="container nav-container"><a href="index.html" class="logo"><span class="logo-text">DET<span class="accent">wal</span></span></a><nav class="nav-actions"><a class="btn btn-ghost" href="store.html">Store</a></nav></div></header>
@@ -22,6 +22,18 @@
   <section class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>My TopG Algo plans</h2><p>Your submitted plan requests and their latest review status.</p></div><a href="help-desk.html">Help Desk</a><a href="store.html">Buy a plan</a></div>
     <div id="planRequests" class="plan-request-list"><p class="dashboard-muted">Loading your plan history…</p></div>
   </section>
+  <section class="dashboard-panel bot-activation-panel">
+    <div class="dashboard-panel-heading"><div><h2>Bot activation</h2><p>Request setup for a plan you currently have active.</p></div><span class="activation-pill">Secure setup</span></div>
+    <form id="botActivationForm" class="activation-form">
+      <label for="activationName">Full name</label><input id="activationName" name="name" type="text" maxlength="100" autocomplete="name" required>
+      <label for="activationWhatsapp">WhatsApp number</label><input id="activationWhatsapp" name="whatsapp" type="tel" maxlength="20" autocomplete="tel" placeholder="+91…" required>
+      <label for="activationEmail">Email address</label><input id="activationEmail" name="email" type="email" autocomplete="email" required>
+      <label for="activationPlan">Choose your purchased plan</label><select id="activationPlan" name="plan" required><option value="">Loading eligible plans…</option></select>
+      <p class="activation-hint" id="activationPlanHint">Only active, approved subscriptions appear here.</p>
+      <button class="btn btn-primary" id="activationContinue" type="submit">Continue to MT5 setup</button>
+      <p id="activationMessage" class="dashboard-muted" role="status"></p>
+    </form>
+  </section>
   <section class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>Invoices & receipts</h2><p>Download or print your approved payment receipts.</p></div></div><div id="invoiceList" class="plan-request-list">Loading invoices…</div></section>
   <section class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>Refer & earn</h2><p>Share your code. Both users can earn ₹100 after the referred customer makes their first eligible paid purchase. Rewards require admin approval.</p></div></div><p>Your referral code: <strong id="referralCode">Not created yet</strong> <button class="btn btn-primary" id="generateReferral" type="button">Generate my referral code</button> <button class="btn btn-ghost" id="copyReferral" type="button" disabled>Copy code</button></p><p>Share your personal signup link: <input id="referralLink" readonly aria-label="Your referral signup link"> <button class="btn btn-ghost" id="copyReferralLink" type="button">Copy link</button></p><form id="applyReferralForm"><label for="referralInput">Have a referral code?</label><input id="referralInput" placeholder="Enter a referral code" maxlength="20" required><button class="btn btn-primary" type="submit">Apply code</button><span id="referralStatus" role="status"></span></form><div><strong>Your referral rewards</strong><p id="referralRewards">Loading rewards…</p></div></section>
   <section class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>Notifications</h2><p>Important updates about payments and subscriptions.</p></div></div><div id="notificationList" class="plan-request-list">Loading notifications…</div></section>
@@ -29,5 +41,5 @@
   <p class="dashboard-disclaimer">Payment requests are manually reviewed. An “Approved” status means your payment request was approved; it does not by itself confirm that your trading terminal has been configured or connected. Trading involves risk.</p>
 </main>
 <footer class="site-footer"><div class="container footer-bottom-inner"><p>© <span id="year">2026</span> DETwal. All rights reserved.</p></div></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/supabase-client.js?v=20261103-2"></script><script src="js/api-client.js" defer></script><script src="js/account-ui.js" defer></script><script src="js/dashboard.js?v=20261103-2" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/supabase-client.js?v=20261103-2"></script><script src="js/api-client.js" defer></script><script src="js/account-ui.js" defer></script><script src="js/dashboard.js?v=20261103-botactivation" defer></script>
 </body></html>
