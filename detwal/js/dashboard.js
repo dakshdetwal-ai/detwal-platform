@@ -148,23 +148,70 @@ document.addEventListener('DOMContentLoaded', async () => {
         print.className = 'btn btn-ghost';
         print.textContent = 'Print receipt';
         print.addEventListener('click', () => {
-          const win = window.open('', '_blank', 'width=600,height=700');
-          if (!win) return;
-          const doc = win.document;
-          const heading = doc.createElement('h1');
-          heading.textContent = 'DETwal payment receipt';
-          doc.body.append(heading);
-          [
-            ['Invoice', invoice.invoice_number],
-            ['Plan', invoice.plan_id],
-            ['Amount', '₹' + Number(invoice.amount_inr).toLocaleString('en-IN')],
-            ['Issued', new Date(invoice.issued_at).toLocaleString('en-IN')]
-          ].forEach(([label, value]) => {
-            const p = doc.createElement('p');
-            p.textContent = label + ': ' + String(value ?? '');
-            doc.body.append(p);
+          const win = window.open('', '_blank', 'width=820,height=900');
+          if (!win) {
+            setText('invoiceList', 'Please allow pop-ups to print or save your receipt.');
+            return;
+          }
+          const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+          })[char]);
+          const money = Number(invoice.amount_inr).toLocaleString('en-IN', {
+            style: 'currency', currency: 'INR', maximumFractionDigits: 2
           });
-          win.print();
+          const issued = new Date(invoice.issued_at);
+          const issuedDate = issued.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+          const issuedTime = issued.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+          const customerName = meta.full_name || meta.name || 'Customer';
+          const customerEmail = user.email || '—';
+          const customerPhone = meta.phone_number || 'Not provided';
+          const doc = win.document;
+          doc.open();
+          doc.write(`<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Receipt ${escapeHtml(invoice.invoice_number)} — DETwal</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:36px;background:#eef1f8;color:#20243a;font-family:Inter,Arial,sans-serif}
+.receipt{max-width:760px;margin:0 auto;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 18px 55px rgba(31,38,75,.13)}
+.banner{padding:34px 42px;background:linear-gradient(120deg,#25134f,#6534c7 58%,#9b65f5);color:#fff;display:flex;justify-content:space-between;gap:20px;align-items:center}
+.brand{font-size:28px;font-weight:800;letter-spacing:-1px}.brand span{color:#d6c1ff}.tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-top:5px}
+.stamp{border:1px solid rgba(255,255,255,.45);border-radius:30px;padding:9px 15px;font-size:11px;font-weight:700;letter-spacing:1px;white-space:nowrap}
+.content{padding:36px 42px}.heading{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:28px}
+h1{font-size:26px;margin:0 0 7px;color:#211b36}.muted{color:#777b90;font-size:13px;line-height:1.6}
+.invoice-no{text-align:right;font-size:12px;color:#777b90}.invoice-no strong{display:block;color:#34245f;font-size:15px;margin-top:5px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.panel{background:#f7f5fc;border:1px solid #ece7f7;border-radius:13px;padding:18px}
+.label{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#858096;margin-bottom:9px}
+.value{font-size:14px;font-weight:650;color:#2a2540;line-height:1.7;overflow-wrap:anywhere}
+table{width:100%;border-collapse:collapse;margin-top:22px}th{text-align:left;background:#f3effb;color:#63537e;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:13px}
+td{padding:17px 13px;border-bottom:1px solid #eeeaf4;font-size:13px}td:last-child,th:last-child{text-align:right}
+.total{margin:20px 0 0 auto;max-width:300px;background:#f4efff;border-radius:14px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
+.total span{font-size:12px;color:#66577e;font-weight:700}.total strong{font-size:22px;color:#5b2bb7}
+.note{margin-top:28px;padding:16px 18px;border-left:4px solid #8b55e8;background:#faf8ff;color:#6d6880;font-size:12px;line-height:1.7}
+.footer{padding:20px 42px;background:#faf9fd;border-top:1px solid #eeeaf4;text-align:center;color:#888397;font-size:11px;line-height:1.7}
+.actions{text-align:center;margin:20px auto 0}.actions button{border:0;border-radius:30px;padding:12px 24px;background:#713bd1;color:white;font-weight:700;font-size:13px;cursor:pointer}
+@media(max-width:600px){body{padding:12px}.banner,.content{padding:24px 20px}.footer{padding:18px 20px}.grid{grid-template-columns:1fr}.heading{flex-direction:column}.invoice-no{text-align:left}}
+@media print{body{padding:0;background:#fff}.receipt{box-shadow:none;border-radius:0;max-width:none}.actions{display:none}.banner{-webkit-print-color-adjust:exact;print-color-adjust:exact}.panel,.total,.note,.footer,th{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head><body>
+<article class="receipt">
+<header class="banner"><div><div class="brand">DET<span>wal</span></div><div class="tag">Official payment receipt</div></div><div class="stamp">RECEIPT ISSUED</div></header>
+<main class="content">
+<div class="heading"><div><h1>Payment receipt</h1><div class="muted">Thank you for choosing DETwal.</div></div><div class="invoice-no">RECEIPT NUMBER<strong>${escapeHtml(invoice.invoice_number)}</strong></div></div>
+<div class="grid">
+<section class="panel"><div class="label">Billed to</div><div class="value">${escapeHtml(customerName)}</div><div class="muted">${escapeHtml(customerEmail)}<br>Phone: ${escapeHtml(customerPhone)}</div></section>
+<section class="panel"><div class="label">Receipt details</div><div class="value">Issue date: ${escapeHtml(issuedDate)}</div><div class="muted">Time: ${escapeHtml(issuedTime)}<br>Currency: Indian Rupee (INR)</div></section>
+</div>
+<div class="label">Purchase summary</div>
+<table><thead><tr><th>Description</th><th>Plan</th><th>Amount</th></tr></thead>
+<tbody><tr><td>TopG Algo access</td><td>${escapeHtml(String(invoice.plan_id).toUpperCase())}</td><td>${escapeHtml(money)}</td></tr></tbody></table>
+<div class="total"><span>TOTAL AMOUNT</span><strong>${escapeHtml(money)}</strong></div>
+<div class="note"><strong>Important:</strong> This receipt records the invoice details available in your DETwal account. Any tax breakdown, payment method, transaction reference or billing address not shown here was not available in the invoice record. Please retain this receipt for your records.</div>
+</main>
+<footer class="footer">DETwal · Automated trading technology<br>This receipt is generated electronically. No physical signature is required.</footer>
+</article>
+<div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div>
+</body></html>`);
+          doc.close();
         });
         card.append(title, detail, print);
         host.append(card);
