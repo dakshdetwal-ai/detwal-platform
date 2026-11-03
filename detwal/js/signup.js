@@ -1,5 +1,13 @@
 /* DETwal signup: Supabase Auth + client-side validation. */
 document.addEventListener('DOMContentLoaded', () => {
+  // Pre-fill referral codes shared through dashboard signup links.
+  const referralInput = document.getElementById('referralCode');
+  const referralFromUrl = new URLSearchParams(window.location.search).get('ref');
+  if (referralInput && referralFromUrl) {
+    referralInput.value = referralFromUrl.trim().toUpperCase();
+    referralInput.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
   initPasswordToggles();
   initSignupValidation();
   initRevealAnimations();
