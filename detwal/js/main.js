@@ -24,16 +24,25 @@ function initMobileNav() {
   const closeNav = () => {
     mainNav.classList.remove('open');
     navToggle.classList.remove('open');
+    document.body.classList.remove('nav-open');
     navToggle.setAttribute('aria-expanded', 'false');
   };
 
   const toggleNav = () => {
     const isOpen = mainNav.classList.toggle('open');
     navToggle.classList.toggle('open', isOpen);
+    document.body.classList.toggle('nav-open', isOpen);
     navToggle.setAttribute('aria-expanded', String(isOpen));
   };
 
   navToggle.addEventListener('click', toggleNav);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mainNav.classList.contains('open')) {
+      closeNav();
+      navToggle.focus();
+    }
+  });
 
   mainNav.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', closeNav);
