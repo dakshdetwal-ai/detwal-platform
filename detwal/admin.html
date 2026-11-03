@@ -88,6 +88,7 @@
       <button class="active" data-tab="payments"><span class="nav-icon">▦</span>Overview & Payments</button>
       <button data-tab="testing"><span class="nav-icon">☷</span>TopG test applications</button>
       <button data-tab="customers"><span class="nav-icon">♙</span>Customers</button>
+      <button data-tab="bot-requests"><span class="nav-icon">⌁</span>Bot activation requests</button>
       <button data-tab="tickets"><span class="nav-icon">▤</span>Support tickets</button>
       <button data-tab="plans"><span class="nav-icon">▣</span>Subscription plans</button>
       <button data-tab="coupons"><span class="nav-icon">◇</span>Coupons</button>
@@ -127,6 +128,7 @@
             <div class="panel-head"><div><h2>Customers & subscriptions</h2><span class="muted">Search and manage registered customers</span></div><input id="userSearch" placeholder="Search name, email or phone"></div>
             <div id="customersTable">Loading customers…</div>
           </section>
+          <section id="bot-requests" class="panel hidden"><div class="panel-head"><div><h2>Bot activation requests</h2><span class="muted">Customer details submitted for MT5 setup. Passwords are never shown here.</span></div><button id="refreshBotRequests" class="action-btn">Refresh</button></div><div id="botRequestsTable">Loading activation requests…</div></section>
           <section id="tickets" class="panel hidden"><div class="panel-head"><div><h2>Support inbox</h2><span class="muted">Respond to customer requests</span></div></div><div id="ticketsList">Loading tickets…</div></section>
           <section id="plans" class="panel hidden">
             <div class="panel-head"><div><h2>Subscription plans</h2><span class="muted">Manage pricing and terminal limits</span></div><button id="newPlan" class="primary">+ Add plan</button></div>
