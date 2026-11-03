@@ -9,3 +9,5 @@
 .activation-hint{color:#a09daf;font-size:.82rem;margin:2px 0}
 .activation-form button{justify-self:start}
 @media(max-width:650px){.activation-form{grid-template-columns:1fr}.activation-form .activation-hint,.activation-form button,.activation-form #activationMessage{grid-column:auto}}
+
+.credential-notice{grid-column:1/-1;padding:17px;border:1px solid #5a477d;border-radius:12px;background:#191329;color:#e6dcff}.credential-notice strong{color:#d7c1ff}.credential-notice p{color:#c1b9d1;font-size:.86rem;line-height:1.65;margin:8px 0 0}.setup-consent{grid-column:1/-1;display:flex;align-items:flex-start;gap:10px;color:#c8c2d5;font-size:.85rem;line-height:1.5}.setup-consent input{width:auto;margin-top:3px;accent-color:#9466e9}
