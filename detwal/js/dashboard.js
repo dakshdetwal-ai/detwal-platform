@@ -125,9 +125,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function loadInvoices() {
     const host = $('invoiceList');
     try {
-      const { data, error } = await client.from('invoices')
+      // Do not leave the panel spinning indefinitely if the network stalls.
+      const invoiceRequest = client.from('invoices')
         .select('invoice_number,plan_id,amount_inr,issued_at')
         .eq('user_id', user.id).order('issued_at', { ascending: false });
+      const timeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Invoice request timed out. Please try again.')), 10000)
+      );
+      const { data, error } = await Promise.race([invoiceRequest, timeout]);
       if (error) throw error;
       host.replaceChildren();
       (data || []).forEach(invoice => {
