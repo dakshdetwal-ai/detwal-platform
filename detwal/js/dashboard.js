@@ -330,5 +330,62 @@ td{padding:17px 13px;border-bottom:1px solid #eeeaf4;font-size:13px}td:last-chil
     }
   }
 
-  await Promise.allSettled([loadPlanHistory(), loadInvoices(), loadReferral(), loadNotifications()]);
+
+  // Bot activation: expose only subscriptions that are currently active.
+  async function initBotActivation() {
+    const form = $('botActivationForm');
+    if (!form) return;
+    const planSelect = $('activationPlan');
+    const hint = $('activationPlanHint');
+    const nameInput = $('activationName');
+    const phoneInput = $('activationWhatsapp');
+    const emailInput = $('activationEmail');
+    nameInput.value = meta.full_name || meta.name || '';
+    phoneInput.value = meta.phone_number || '';
+    emailInput.value = user.email || '';
+    try {
+      const { data, error } = await client.from('subscriptions')
+        .select('id,plan_id,expires_at,terminals_limit')
+        .eq('user_id', user.id).eq('status', 'active').gt('expires_at', new Date().toISOString())
+        .order('expires_at', { ascending: false });
+      if (error) throw error;
+      planSelect.replaceChildren();
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = data.length ? 'Select your active plan' : 'No active purchased plan';
+      planSelect.append(placeholder);
+      (data || []).forEach(sub => {
+        const option = document.createElement('option');
+        option.value = sub.id;
+        option.textContent = String(sub.plan_id).toUpperCase() + ' · ' +
+          sub.terminals_limit + ' terminal(s) · expires ' +
+          new Date(sub.expires_at).toLocaleDateString('en-IN');
+        planSelect.append(option);
+      });
+      if (!data.length) {
+        planSelect.disabled = true;
+        $('activationContinue').disabled = true;
+        hint.textContent = 'You need an approved, active subscription before requesting bot activation.';
+      }
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+        const selected = data.find(item => item.id === planSelect.value);
+        if (!selected) { setText('activationMessage', 'Please select an active purchased plan.'); return; }
+        const draft = {
+          name: nameInput.value.trim(),
+          whatsapp: phoneInput.value.trim(),
+          email: emailInput.value.trim(),
+          subscriptionId: selected.id
+        };
+        sessionStorage.setItem('detwalBotActivationDraft', JSON.stringify(draft));
+        location.href = 'bot-setup.html';
+      });
+    } catch (error) {
+      console.error('DETwal bot activation plans failed', error);
+      planSelect.replaceChildren(new Option('Could not load plans — refresh to retry', ''));
+      hint.textContent = 'We could not verify your active plan. Please refresh or contact support.';
+    }
+  }
+
+  await Promise.allSettled([loadPlanHistory(), loadInvoices(), loadReferral(), loadNotifications(), initBotActivation()]);
 });
