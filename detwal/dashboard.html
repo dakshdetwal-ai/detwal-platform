@@ -10,7 +10,7 @@
 <body>
 <header class="site-header"><div class="container nav-container"><a href="index.html" class="logo"><span class="logo-text">DET<span class="accent">wal</span></span></a><nav class="nav-actions"><a class="btn btn-ghost" href="store.html">Store</a></nav></div></header>
 <main class="dashboard-wrap">
-  <section class="dashboard-welcome"><div><span class="hero-badge">DETwal Account</span><h1>Welcome back, <span class="gradient-text" id="welcomeName">Trader</span></h1><p>Manage your account and keep track of your TopG Algo plan requests.</p></div><a class="btn btn-primary" href="store.html">Explore plans</a></section>
+  <section class="dashboard-welcome"><div><span class="hero-badge">DETwal Account</span><h1>Welcome back, <span class="gradient-text" id="welcomeName">Trader</span></h1><p>Track your DETwal service plan, payment verification and account updates.</p></div><a class="btn btn-primary" href="store.html">Explore plans</a></section>
   <section class="dashboard-stats" aria-label="Account overview">
     <article class="dashboard-stat"><span>Plan requests</span><strong id="requestCount">—</strong></article>
     <article class="dashboard-stat"><span>Approved</span><strong id="approvedCount">—</strong></article>
@@ -19,10 +19,10 @@
   <section class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>Personal details</h2><p>Your registered account information.</p></div><a href="profile.html">Edit profile</a></div>
     <div class="dashboard-details"><div><span>Full name</span><strong id="fullName">Loading…</strong></div><div><span>Email address</span><strong id="emailAddress">Loading…</strong></div><div><span>Mobile number</span><strong id="mobileNumber">Not added yet</strong></div><div><span>Account created</span><strong id="joinedDate">—</strong></div></div>
   </section>
-  <section class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>My TopG Algo plans</h2><p>Your submitted plan requests and their latest review status.</p></div><a href="help-desk.html">Help Desk</a><a href="store.html">Buy a plan</a></div>
+  <section class="dashboard-panel"><div class="dashboard-panel-heading"><div><h2>My DETwal service plan</h2><p>Your payment submissions and current subscription status.</p></div><a href="help-desk.html">Help Desk</a><a href="store.html">Buy a plan</a></div>
     <div id="planRequests" class="plan-request-list"><p class="dashboard-muted">Loading your plan history…</p></div>
   </section>
-  <section class="dashboard-panel bot-activation-panel">
+  <section class="dashboard-panel bot-activation-panel" hidden>
     <div class="dashboard-panel-heading"><div><h2>Bot activation</h2><p>Request setup for a plan you currently have active.</p></div><span class="activation-pill">Secure setup</span></div>
     <form id="botActivationForm" class="activation-form">
       <label for="activationName">Full name</label><input id="activationName" name="name" type="text" maxlength="100" autocomplete="name" required>
