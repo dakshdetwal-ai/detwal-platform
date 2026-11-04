@@ -32,8 +32,8 @@ bool PublishSnapshot()
       return false;
    }
 
-   FileWrite(handle, "DETWAL1", (long)TimeLocal());
    int total = PositionsTotal();
+   FileWrite(handle, "DETWAL1", (long)TimeLocal(), total);
    int published = 0;
 
    for(int i = 0; i < total; i++)
