@@ -44,6 +44,8 @@ This first milestone deliberately avoids a network service and does not collect 
 - Demo accounts only; code checks the MT5 trade mode and refuses live/contest accounts.
 - Shared local Common Files folder only; terminals must run on the same Windows host.
 - Market positions only; pending orders are not copied.
+- Follower prototype requires a hedging-mode demo account; netting mode is rejected to avoid mixing copied positions with other trades.
+- The snapshot header includes the expected position count; incomplete reads are rejected so the follower does not act on a truncated snapshot.
 - Initial prototype supports open, SL/TP modification and full close. Partial-close/volume-resize, symbol mapping, per-follower sizing, account risk limits, robust queueing, reconnect replay, and server/dashboard sync are future milestones.
 - The snapshot is polled once per second. This is not guaranteed low-latency execution.
 - If the master snapshot is missing or older than 30 seconds, the follower does nothing and will not close trades based on stale data.
