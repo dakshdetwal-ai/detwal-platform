@@ -203,7 +203,7 @@ td{padding:17px 13px;border-bottom:1px solid #eeeaf4;font-size:13px}td:last-chil
 </div>
 <div class="label">Purchase summary</div>
 <table><thead><tr><th>Description</th><th>Plan</th><th>Amount</th></tr></thead>
-<tbody><tr><td>TopG Algo access</td><td>${escapeHtml(String(invoice.plan_id).toUpperCase())}</td><td>${escapeHtml(money)}</td></tr></tbody></table>
+<tbody><tr><td>DETwal managed trading service</td><td>${escapeHtml(String(invoice.plan_id).toUpperCase())}</td><td>${escapeHtml(money)}</td></tr></tbody></table>
 <div class="total"><span>TOTAL AMOUNT</span><strong>${escapeHtml(money)}</strong></div>
 <div class="note"><strong>Important:</strong> This receipt records the invoice details available in your DETwal account. Any tax breakdown, payment method, transaction reference or billing address not shown here was not available in the invoice record. Please retain this receipt for your records.</div>
 </main>
@@ -387,5 +387,5 @@ td{padding:17px 13px;border-bottom:1px solid #eeeaf4;font-size:13px}td:last-chil
     }
   }
 
-  await Promise.allSettled([loadPlanHistory(), loadInvoices(), loadReferral(), loadNotifications(), initBotActivation()]);
+  await Promise.allSettled([loadPlanHistory(), loadInvoices(), loadReferral(), loadNotifications()]);
 });
