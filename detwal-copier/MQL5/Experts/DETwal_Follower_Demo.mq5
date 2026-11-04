@@ -92,8 +92,10 @@ bool LoadSnapshot()
 
    string version = FileReadString(h);
    string stamp_text = FileReadString(h);
+   string count_text = FileReadString(h);
    long stamp = (long)StringToInteger(stamp_text);
-   if(version != "DETWAL1" || stamp <= 0 || (TimeLocal() - (datetime)stamp) > InpMaxSnapshotAgeSeconds)
+   int expected_count = (int)StringToInteger(count_text);
+   if(version != "DETWAL1" || stamp <= 0 || expected_count < 0 || (TimeLocal() - (datetime)stamp) > InpMaxSnapshotAgeSeconds)
    {
       FileClose(h);
       Print("DETwal FOLLOWER: invalid or stale snapshot; no action taken.");
@@ -131,6 +133,11 @@ bool LoadSnapshot()
       g_tps[n] = StringToDouble(tp_text);
    }
    FileClose(h);
+   if(ArraySize(g_master_ids) != expected_count)
+   {
+      PrintFormat("DETwal FOLLOWER: incomplete snapshot (%d/%d records); no action taken.", ArraySize(g_master_ids), expected_count);
+      return false;
+   }
    return true;
 }
 
@@ -231,6 +238,11 @@ int OnInit()
    if(!IsDemoAccount())
    {
       Print("DETwal FOLLOWER: attach this prototype to a DEMO account only.");
+      return INIT_FAILED;
+   }
+   if((ENUM_ACCOUNT_MARGIN_MODE)AccountInfoInteger(ACCOUNT_MARGIN_MODE) != ACCOUNT_MARGIN_MODE_RETAIL_HEDGING)
+   {
+      Print("DETwal FOLLOWER: this prototype requires a HEDGING demo account. Netting mode is not supported.");
       return INIT_FAILED;
    }
    trade.SetExpertMagicNumber(InpFollowerMagic);
