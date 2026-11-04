@@ -1,0 +1,11 @@
+name = "detwal-copier-relay"
+main = "src/index.ts"
+compatibility_date = "2026-11-04"
+
+[[durable_objects.bindings]]
+name = "RELAY"
+class_name = "SnapshotRelay"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["SnapshotRelay"]
